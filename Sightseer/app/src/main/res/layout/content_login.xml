@@ -48,7 +48,7 @@
         app:layout_constraintVertical_bias="0.052" />
 
     <android.support.v7.widget.CardView
-        android:id="@+id/loginCardView"
+        android:id="@+id/registerCardView"
         android:layout_width="290dp"
         android:layout_height="50dp"
         android:layout_marginBottom="88dp"
@@ -91,7 +91,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginCardView"
+        app:layout_constraintTop_toBottomOf="@+id/registerCardView"
         app:layout_constraintVertical_bias="0.239" />
 
     <TextView
