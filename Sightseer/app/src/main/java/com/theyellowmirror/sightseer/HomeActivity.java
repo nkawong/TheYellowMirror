@@ -7,6 +7,7 @@ package com.theyellowmirror.sightseer;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.widget.Toast;
 
@@ -17,7 +18,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class HomeActivity extends FragmentActivity{
+public class HomeActivity extends FragmentActivity {
 
     private static final int GPS_ERRORDIALOG_REQUEST = 9001;
     GoogleMap mMap;
@@ -26,37 +27,18 @@ public class HomeActivity extends FragmentActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState){
     super.onCreate(savedInstanceState);
-        if(servicesOK()){
-            Toast.makeText(this, "Ready to Map!", Toast.LENGTH_SHORT).show();
             setContentView(R.layout.activity_home);
 
           //  mMapView = (MapView) findViewById(R.id.map);
-            mMapView = findViewById(R.id.map);
+            mMapView = (MapView) findViewById(R.id.map);
             mMapView.onCreate(savedInstanceState);
         }
-        else{
-            setContentView(R.layout.activity_menu);
-        }
-    }
 
     public boolean onCreatOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.activity_menu_drawer, menu);
         return true;
     }
-    public boolean servicesOK(){
-        int isAvailable = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if(isAvailable == ConnectionResult.SUCCESS){
-            return true;
-        }
-        else if(GooglePlayServicesUtil.isUserRecoverableError(isAvailable)){
-            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(isAvailable, this, GPS_ERRORDIALOG_REQUEST);
-            dialog.show();
-        }
-        else{
-            Toast.makeText(this, "Can't connect to Google Play Services", Toast.LENGTH_SHORT).show();
-        }
-        return false;
-    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
