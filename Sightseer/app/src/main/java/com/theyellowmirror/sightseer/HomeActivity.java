@@ -14,6 +14,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class HomeActivity extends FragmentActivity{
 
@@ -24,17 +26,17 @@ public class HomeActivity extends FragmentActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState){
     super.onCreate(savedInstanceState);
+        if(servicesOK()){
+            Toast.makeText(this, "Ready to Map!", Toast.LENGTH_SHORT).show();
+            setContentView(R.layout.activity_home);
 
-    if(servicesOK()){
-        Toast.makeText(this, "Ready to Map!", Toast.LENGTH_SHORT).show();
-        setContentView(R.layout.activity_home);
-
-        mMapView = (MapView) findViewById(R.id.map);
-        mMapView.onCreate(savedInstanceState);
-    }
-    else{
-        setContentView(R.layout.activity_menu);
-    }
+          //  mMapView = (MapView) findViewById(R.id.map);
+            mMapView = findViewById(R.id.map);
+            mMapView.onCreate(savedInstanceState);
+        }
+        else{
+            setContentView(R.layout.activity_menu);
+        }
     }
 
     public boolean onCreatOptionsMenu(Menu menu){
