@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.theyellowmirror.sightseer">
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -36,5 +38,4 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCOYm9wVdg8fmm79oLwKrA3ZBk30zfXmyE"/>
     </application>
-    <uses-feature android:name="android.hardware.location.gps" />
 </manifest>
