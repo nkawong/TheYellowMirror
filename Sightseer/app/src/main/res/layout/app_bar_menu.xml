@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.theyellowmirror.sightseer.MenuActivity">
 
+
     <include layout="@layout/content_menu" />
 
     <android.support.design.widget.AppBarLayout

@@ -105,28 +105,24 @@ public class MenuActivity extends AppCompatActivity
         super.onDestroy();
         mMapView.onDestroy();
     }
-
     @Override
-    public void onLowMemory() {
+    public void onLowMemory(){
         mMapView.onLowMemory();
     }
-
     @Override
     protected void onPause() {
         super.onPause();
         mMapView.onPause();
     }
-
     @Override
     protected void onResume() {
         super.onResume();
         mMapView.onResume();
     }
-
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(Bundle outState){
         super.onSaveInstanceState(outState);
         mMapView.onSaveInstanceState(outState);
     }
-}
 
+}
