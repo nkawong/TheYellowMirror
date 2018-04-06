@@ -21,6 +21,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class HomeActivity extends FragmentActivity {
 
     private static final int GPS_ERRORDIALOG_REQUEST = 9001;
+    private static final int MY_PERMISSION_REQUEST = 0;
+    
     GoogleMap mMap;
     MapView mMapView;
 
@@ -32,7 +34,9 @@ public class HomeActivity extends FragmentActivity {
           //  mMapView = (MapView) findViewById(R.id.map);
             mMapView = (MapView) findViewById(R.id.map);
             mMapView.onCreate(savedInstanceState);
-        }
+
+
+    }
 
     public boolean onCreatOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.activity_menu_drawer, menu);
