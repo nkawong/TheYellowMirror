@@ -13,4 +13,12 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_menu_bar">MenuBarActivity</string>
     <string name="title_activity_testing">testing</string>
+
+    <!-- Location Rating Fragment Strings -->
+    <string name="rating_loc_frag_text">How was your experience at </string>
+    <string name="like">Like</string>
+    <string name="dislike">Dislike</string>
+    <string name="rateLater">Rate Later</string>
+
+
 </resources>

@@ -671,6 +671,13 @@
 
 
     </android.support.constraint.ConstraintLayout>
+    <fragment
+        android:name="com.theyellowmirror.sightseer.LocationRatingFragment"
+        android:id="@+id/rating_frag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        class="com.theyellowmirror.sightseer.LocationRatingFragment"
+        />
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
 <!--</android.support.constraint.ConstraintLayout>-->
