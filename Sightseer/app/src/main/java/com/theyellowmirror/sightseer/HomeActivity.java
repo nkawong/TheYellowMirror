@@ -38,15 +38,15 @@ public class HomeActivity extends FragmentActivity implements OnMapReadyCallback
     super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_home);
 
-          //  mMapView = (MapView) findViewById(R.id.map);
+//            mMapView = (MapView) findViewById(R.id.map);
             mMapView = (MapView) findViewById(R.id.map);
             mMapView.onCreate(savedInstanceState);
             //initMap();
             onMapReady(mMap);
     }
 //    public void initMap(){
-//        //MapFragment mView = (MapFragment) getFragmentManager().findFragmentById(R.id.mapView);
-//        //mView.getMapAsync(this);
+//        MapFragment mView = (MapFragment) getFragmentManager().findFragmentById(R.id.mapView);
+//        mView.getMapAsync(this);
 //    }
     public void onMapReady(GoogleMap map){
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -56,28 +56,54 @@ public class HomeActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-//        if (requestCode == MY_PERMISSION_REQUEST) {
-//            if (permissions.length == 1 &&
-//                    permissions[0] == Manifest.permission.ACCESS_FINE_LOCATION &&
-//                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                requestPermissions(permissions, MY_PERMISSION_REQUEST);
-//            }
-//        }
-//    }
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == MY_PERMISSION_REQUEST) {
+            if (permissions.length == 1 &&
+                    permissions[0] == Manifest.permission.ACCESS_FINE_LOCATION &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(permissions, MY_PERMISSION_REQUEST);
+            }
+        }
+        getGeoLocation(33.782972,-118.1191328);
+    }
 
     public boolean onCreatOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.activity_menu_drawer, menu);
         return true;
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mMapView.onDestroy();
+    }
+    @Override
+    public void onLowMemory(){
+        mMapView.onLowMemory();
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        mMapView.onSaveInstanceState(outState);
+    }
+
 //    @Override
 //    public void onMapReady(GoogleMap googleMap) {
 //        mMap = googleMap;
 //        getGeoLocation(33.782972,-118.1191328);
 //    }
-//    public void getGeoLocation(double lat, double lng){
-//        LatLng position = new LatLng(lat, lng);
-//        CameraUpdate cam_update = CameraUpdateFactory.newLatLng(position);
-//        mMap.moveCamera(cam_update);
-//    }
+    public void getGeoLocation(double lat, double lng){
+        LatLng position = new LatLng(lat, lng);
+        CameraUpdate cam_update = CameraUpdateFactory.newLatLng(position);
+        mMap.moveCamera(cam_update);
+    }
 }
