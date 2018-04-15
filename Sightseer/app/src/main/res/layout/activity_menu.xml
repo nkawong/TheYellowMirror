@@ -10,7 +10,6 @@
 
 
 
-
     <include
         layout="@layout/app_bar_menu"
         android:layout_width="match_parent"
