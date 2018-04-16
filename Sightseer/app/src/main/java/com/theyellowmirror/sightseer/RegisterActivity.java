@@ -35,9 +35,9 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_register);
         //Get account details from user
-        register = findViewById(R.id.registerButton);
-        email = findViewById(R.id.emailField);
-        password = findViewById(R.id.passField);
+        register = findViewById(R.id.registerBT);
+        email = findViewById(R.id.emailET);
+        password = findViewById(R.id.passET);
 
         register.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

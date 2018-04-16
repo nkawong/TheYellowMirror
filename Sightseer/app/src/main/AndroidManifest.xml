@@ -6,6 +6,9 @@
 
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+
 
     <application
         android:allowBackup="true"
@@ -29,14 +32,14 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MenuActivity"
-            android:label="@string/title_activity_menu"
-            android:theme="@style/AppTheme" />
-        <activity  android:name="HomeActivity"
-                   android:label="HomeActivity"
-                   android:theme= "@style/AppTheme.NoActionBar"/>
+            android:label="SightSeer"
+            android:theme="@style/AppTheme"
+            android:icon="@drawable/sightseer_logo"/>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCOYm9wVdg8fmm79oLwKrA3ZBk30zfXmyE"/>
+            android:value="AIzaSyCoqmv4EOou0fn6TyoJUd2chM_OMTdlppM"/>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
