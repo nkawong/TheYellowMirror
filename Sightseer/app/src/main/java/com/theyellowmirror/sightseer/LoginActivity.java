@@ -58,6 +58,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        //Links homeActivity with textView "Skip"- skips to main/home page
+        TextView skipLink = findViewById(R.id.skipTextView);
+        skipLink.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent skipIntent = new Intent(LoginActivity.this, HomeActivity.class);
+                LoginActivity.this.startActivity(skipIntent);
+            }
+        });
         login.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 signIn();
