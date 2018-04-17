@@ -10,8 +10,7 @@
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="match_parent"-->
     <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
-    <!--tools:context="com.theyellowmirror.sightseer.MenuActivity"-->
-    <!--tools:showIn="@layout/app_bar_menu">-->
+    <!--tools:context="com.theyellowmirror.sightseer.MenuActivity">-->
 
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
 
@@ -27,647 +26,468 @@
     sothree:umanoShadowHeight="4dp">
 
 
-    <com.google.android.gms.maps.MapView
-    android:id="@+id/mapView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    <!--<com.google.android.gms.maps.MapView-->
+    <!--android:id="@+id/mapView"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent" />-->
 
-    />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/map"
+            tools:context=".MenuActivity"
+            android:name="com.google.android.gms.maps.SupportMapFragment" />
 
 
-    <android.support.constraint.ConstraintLayout
+    </RelativeLayout>
+
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#fff"
-        android:gravity="center|top"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        android:orientation="vertical"
+        android:background="@drawable/new_login_gradients"
+        >
 
-
-        <TextView
-            android:id="@+id/textView22"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Est. Mins"
+            android:orientation="vertical"
+            android:gravity="center|top"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.639"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.304" />
-
-        <TextView
-            android:id="@+id/textView20"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Est. Mins"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.639"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.605" />
-
-        <TextView
-            android:id="@+id/textView13"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Est. Mins"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.639"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.46" />
-
-        <TextView
-            android:id="@+id/textView21"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Est. Mins"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.639"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.773" />
-
-        <TextView
-            android:id="@+id/textView12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="30"
-            android:textColor="#000"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.615"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="20"
-            android:textColor="#000"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.843"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/textView10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="130"
-            android:textColor="#000"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.37"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <EditText
-            android:id="@+id/address1ET"
-            android:layout_width="260dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/round_edittext"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.186" />
-
-        <EditText
-            android:id="@+id/address5ET"
-            android:layout_width="260dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/round_edittext"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.85" />
-
-        <EditText
-            android:id="@+id/address4ET"
-            android:layout_width="260dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/round_edittext"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.674" />
-
-        <EditText
-            android:id="@+id/address3ET"
-            android:layout_width="260dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/round_edittext"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.523" />
-
-        <EditText
-            android:id="@+id/address2ET"
-            android:layout_width="260dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/round_edittext"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.36" />
+            app:layout_constraintVertical_bias="0.0">
 
 
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="49dp"
-            android:layout_height="14dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Total Mins"
-            android:textColor="#808080"
-            android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.125"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.056" />
-
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="49dp"
-            android:layout_height="14dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Minutes"
-            android:textColor="#808080"
-            android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.667"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.056" />
-
-        <TextView
-            android:id="@+id/textView7"
-            android:layout_width="55dp"
-            android:layout_height="14dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Total Dis"
-            android:textColor="#808080"
-            android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.396"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.056" />
-
-        <TextView
-            android:id="@+id/textView8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Distance"
-            android:textColor="#808080"
-            android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.887"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.056" />
-
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="58"
-            android:textColor="#000"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.115"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <EditText
-            android:id="@+id/editText7"
-            android:layout_width="38dp"
-            android:layout_height="18dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.793"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.624" />
-
-        <EditText
-            android:id="@+id/editText9"
-            android:layout_width="42dp"
-            android:layout_height="26dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.803"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.309" />
-
-        <EditText
-            android:id="@+id/editText12"
-            android:layout_width="42dp"
-            android:layout_height="26dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.803"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.466" />
-
-        <EditText
-            android:id="@+id/editText8"
-            android:layout_width="37dp"
-            android:layout_height="21dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.791"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.795" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="296dp"
-            android:text="Priority"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.216"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/textView15"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Priority"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.216"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.773" />
-
-        <TextView
-            android:id="@+id/textView16"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Priority"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.216"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.304" />
-
-        <TextView
-            android:id="@+id/textView17"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Priority"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.216"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.138" />
-
-        <TextView
-            android:id="@+id/textView14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="224dp"
-            android:text="Priority"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.216"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.011" />
-
-        <TextView
-            android:id="@+id/textView19"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Start"
-            android:textColor="#000"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.367"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.138" />
-
-        <RelativeLayout
-            android:layout_width="55dp"
-            android:layout_height="22dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_weight=".28"
-            android:background="@drawable/spinner"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.396"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.31">
-
-            <Spinner
-                android:id="@+id/spinner2"
+            <!--time and mile display-->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:layout_marginLeft="5dp"
-                android:background="@android:color/transparent"
-                android:gravity="center"
-                android:spinnerMode="dropdown" />
+                android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:src="@mipmap/ic_dropdown" />
+                <TextView
+                    android:id="@+id/latitude_text"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:ems="10"
+                    android:padding="5dp"
+                    android:text="1:12"
+                    android:textColor="#fff"
+                    android:textSize="14dp" />
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/longitude_text"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:ems="10"
+                    android:padding="5dp"
+                    android:text="30"
+                    android:textColor="#fff"
+                    android:textSize="14dp" />
 
-        <RelativeLayout
-            android:layout_width="55dp"
-            android:layout_height="19dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_weight=".28"
-            android:background="@drawable/spinner"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.396"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.464">
 
-            <Spinner
-                android:id="@+id/spinner3"
+                <TextView
+                    android:id="@+id/totalTimeLeft"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:ems="10"
+                    android:padding="5dp"
+                    android:text="2:30"
+                    android:textColor="#fff"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/totalMileLeft"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:ems="10"
+                    android:padding="5dp"
+                    android:text="120"
+                    android:textColor="#fff"
+                    android:textSize="14dp" />
+
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="30dp"
+                    android:text="End"
+                    android:textSize="8dp"
+                    android:background="@drawable/background_signup"/>
+
+
+
+
+            </LinearLayout>
+
+            <!--time and mile label-->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:layout_marginLeft="5dp"
-                android:background="@android:color/transparent"
-                android:gravity="center"
-                android:spinnerMode="dropdown" />
+                android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:src="@mipmap/ic_dropdown" />
+                <TextView
+                    android:id="@+id/timeLeftTV"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:ems="10"
+                    android:padding="5dp"
+                    android:text="Hour"
+                    android:textColor="#fff"
+                    android:textSize="10dp" />
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/mileLeftTV"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:ems="10"
+                    android:padding="5dp"
+                    android:text="Mile"
+                    android:textColor="#fff"
+                    android:textSize="10dp" />
+
+                <TextView
+                    android:id="@+id/totalTimeLeftTV"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:text="Total Time"
+                    android:textColor="#fff"
+                    android:textSize="10dp"
+                    android:ems="10"
+                    android:background="@android:color/transparent"
+                    android:padding="5dp"/>
+
+                <TextView
+                    android:id="@+id/totalMileLeftTV"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:text="Total Mile"
+                    android:textColor="#fff"
+                    android:textSize="10dp"
+                    android:ems="10"
+                    android:background="@android:color/transparent"
+                    android:padding="5dp"/>
 
 
-        <RelativeLayout
-            android:layout_width="55dp"
-            android:layout_height="24dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_weight=".28"
-            android:background="@drawable/spinner"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.396"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.608">
 
-            <Spinner
-                android:id="@+id/spinner4"
+
+            </LinearLayout>
+
+
+                <!--address 1-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <EditText
+                        android:id="@+id/order1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Order"
+                        android:textColorHint="#ffffff"
+                        android:ems="10"
+                        android:maxLines="1"
+                        android:drawablePadding="12dp"
+                        android:drawableStart="@drawable/order"
+                        android:background="@android:color/transparent"
+                        android:padding="8dp"/>
+                    <EditText
+                        android:id="@+id/time1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="minutes"
+                        android:textColorHint="#ffffff"
+                        android:ems="10"
+                        android:maxLines="1"
+                        android:drawablePadding="12dp"
+                        android:drawableStart="@drawable/minutes"
+                        android:padding="8dp"
+                        android:background="@android:color/transparent"/>
+                </LinearLayout>
+
+
+                <AutoCompleteTextView
+                    android:id="@+id/address1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:drawablePadding="12dp"
+                    android:drawableStart="@drawable/ic_location"
+                    android:ems="10"
+                    android:hint="Address"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:textColor="#fff"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:textColorHint="#ffffff" />
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#f9d7db"
+                    />
+
+                <!--address 2-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <EditText
+                        android:id="@+id/order2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Order"
+                        android:textColorHint="#ffffff"
+                        android:ems="10"
+                        android:maxLines="1"
+                        android:drawablePadding="12dp"
+                        android:drawableStart="@drawable/order"
+                        android:background="@android:color/transparent"
+                        android:padding="8dp"/>
+                    <EditText
+                        android:id="@+id/time2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="minutes"
+                        android:textColorHint="#ffffff"
+                        android:ems="10"
+                        android:maxLines="1"
+                        android:drawablePadding="12dp"
+                        android:drawableStart="@drawable/minutes"
+                        android:padding="8dp"
+                        android:background="@android:color/transparent"/>
+                </LinearLayout>
+
+
+                <AutoCompleteTextView
+                    android:id="@+id/address2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:drawablePadding="12dp"
+                    android:drawableStart="@drawable/ic_location"
+                    android:ems="10"
+                    android:hint="Address"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:textColor="#fff"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:textColorHint="#ffffff"/>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#f9d7db"
+                    />
+
+
+
+            <!--address 3-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/order3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Order"
+                    android:textColorHint="#ffffff"
+                    android:ems="10"
+                    android:maxLines="1"
+                    android:drawablePadding="12dp"
+                    android:drawableStart="@drawable/order"
+                    android:background="@android:color/transparent"
+                    android:padding="8dp"/>
+                <EditText
+                    android:id="@+id/time3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="minutes"
+                    android:textColorHint="#ffffff"
+                    android:ems="10"
+                    android:maxLines="1"
+                    android:drawablePadding="12dp"
+                    android:drawableStart="@drawable/minutes"
+                    android:padding="8dp"
+                    android:background="@android:color/transparent"/>
+            </LinearLayout>
+
+
+            <AutoCompleteTextView
+                android:id="@+id/address3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:layout_marginLeft="5dp"
                 android:background="@android:color/transparent"
-                android:gravity="center"
-                android:spinnerMode="dropdown" />
+                android:drawablePadding="12dp"
+                android:drawableStart="@drawable/ic_location"
+                android:ems="10"
+                android:hint="Address"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textColor="#fff"
+                android:imeOptions="actionDone"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:textColorHint="#ffffff" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:src="@mipmap/ic_dropdown" />
 
-        </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#f9d7db"
+                />
 
-        <RelativeLayout
-            android:layout_width="55dp"
-            android:layout_height="22dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_weight=".28"
-            android:background="@drawable/spinner"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.396"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.777">
 
-            <Spinner
-                android:id="@+id/spinner5"
+            <!--address 4-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/order4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Order"
+                    android:textColorHint="#ffffff"
+                    android:ems="10"
+                    android:maxLines="1"
+                    android:drawablePadding="12dp"
+                    android:drawableStart="@drawable/order"
+                    android:background="@android:color/transparent"
+                    android:padding="8dp"/>
+                <EditText
+                    android:id="@+id/time4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="minutes"
+                    android:textColorHint="#ffffff"
+                    android:ems="10"
+                    android:maxLines="1"
+                    android:drawablePadding="12dp"
+                    android:drawableStart="@drawable/minutes"
+                    android:padding="8dp"
+                    android:background="@android:color/transparent"/>
+            </LinearLayout>
+
+
+            <AutoCompleteTextView
+                android:id="@+id/address4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:layout_marginLeft="5dp"
                 android:background="@android:color/transparent"
-                android:gravity="center"
-                android:spinnerMode="dropdown" />
+                android:drawablePadding="12dp"
+                android:drawableStart="@drawable/ic_location"
+                android:ems="10"
+                android:hint="Address"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textColor="#fff"
+                android:imeOptions="actionDone"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:textColorHint="#ffffff" />
 
-            <ImageView
-                android:layout_width="wrap_content"
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#f9d7db"
+                />
+
+
+
+            <!--address 3-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/order5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Order"
+                    android:textColorHint="#ffffff"
+                    android:ems="10"
+                    android:maxLines="1"
+                    android:drawablePadding="12dp"
+                    android:drawableStart="@drawable/order"
+                    android:background="@android:color/transparent"
+                    android:padding="8dp"/>
+                <EditText
+                    android:id="@+id/time5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="minutes"
+                    android:textColorHint="#ffffff"
+                    android:ems="10"
+                    android:maxLines="1"
+                    android:drawablePadding="12dp"
+                    android:drawableStart="@drawable/minutes"
+                    android:padding="8dp"
+                    android:background="@android:color/transparent"/>
+            </LinearLayout>
+
+
+            <AutoCompleteTextView
+                android:id="@+id/address5"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:src="@mipmap/ic_dropdown" />
+                android:background="@android:color/transparent"
+                android:drawablePadding="12dp"
+                android:drawableStart="@drawable/ic_location"
+                android:ems="10"
+                android:hint="Address"
+                android:singleLine="true"
+                android:inputType="text"
+                android:textColor="#fff"
+                android:imeOptions="actionDone"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:textColorHint="#ffffff"/>
 
-        </RelativeLayout>
 
-        <Button
-            android:id="@+id/startRouteBT"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Start Route!"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.982" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#f9d7db"
+                />
+
+
+            <Button
+                android:id="@+id/startRouteBT"
+                style="@style/Base.TextAppearance.AppCompat.Body1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/background_signup"
+                android:clickable="true"
+                android:padding="16dp"
+                android:text="Start Route"
+                android:textAllCaps="false"
+                android:textColor="#fff"
+                android:textSize="18sp"
+                android:textStyle="normal" />
+
+
+
 
 
     </android.support.constraint.ConstraintLayout>
@@ -678,6 +498,8 @@
         android:layout_height="wrap_content"
         class="com.theyellowmirror.sightseer.LocationRatingFragment"
         />
+        </LinearLayout>
+    </RelativeLayout>
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
 <!--</android.support.constraint.ConstraintLayout>-->

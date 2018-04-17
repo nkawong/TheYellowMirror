@@ -35,6 +35,8 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-auth:15.0.0'
 
+    compile 'com.yelp.clientlib:yelp-android:3.0.0'
+
     implementation 'com.android.support:cardview-v7:26.1.0'
 
     implementation 'com.android.support:design:26.1.0'

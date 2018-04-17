@@ -1,30 +1,36 @@
 package com.theyellowmirror.sightseer;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
-
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-
-import android.widget.Toast;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.content.Intent;
+import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.AuthResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private TextView login;
     private EditText email;
     private EditText password;
+    private static final String TAG ="LoginActivity";
+    private static final int ERROR_DIALOG_REQUEST =9001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +41,15 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.emailField);
         password = findViewById(R.id.passField);
 
+        //checks if the user has the right google service
+        //Links homeActivity with textView "Skip"- skips to main/home page
+        if(isServiceOK()){
+            init();
+        }
+
+
         //Links registerActivity with textView "Register Here"
-        TextView registerLink = findViewById(R.id.registerHereTextView);
+        Button registerLink = (Button) findViewById(R.id.signUp);
         registerLink.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -50,16 +63,18 @@ public class LoginActivity extends AppCompatActivity {
         skipLink.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent skipIntent = new Intent(LoginActivity.this, MenuActivity.class);
+                Intent skipIntent = new Intent(LoginActivity.this, HomeActivity.class);
                 LoginActivity.this.startActivity(skipIntent);
             }
         });
-
         login.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 signIn();
             }
         });
+
+
+
 
     }
     //TODO: Implement an updateGUI to pass screen more legitimately.
@@ -85,4 +100,40 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    //google service permission
+    public void init(){
+        Button skipBT = (Button) findViewById(R.id.skipBT);
+        skipBT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                        Intent skipIntent = new Intent(LoginActivity.this, MenuActivity.class);
+                        LoginActivity.this.startActivity(skipIntent);
+
+
+            }
+        });
+    }
+    public boolean isServiceOK(){
+        Log.d(TAG,"isServiceOK: checking google service");
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(LoginActivity.this);
+
+        if(available == ConnectionResult.SUCCESS){
+            //everything is fine, user can make map requests
+            Log.d(TAG,"isServiceOK: Google Play Service is working");
+            return true;
+        }
+        else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)){
+            //an error occured but we can resolve it
+            Log.d(TAG,"isServiceOK: an error occured, but we can fix it");
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(LoginActivity.this, available,ERROR_DIALOG_REQUEST);
+            dialog.show();
+        }
+        else{
+            Toast.makeText(this,"We can't make map requests",Toast.LENGTH_SHORT).show();
+        }
+        return false;
+
+    }
+
 }
