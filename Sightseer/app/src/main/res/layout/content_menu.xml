@@ -490,7 +490,6 @@
 
 
 
-    </android.support.constraint.ConstraintLayout>
     <fragment
         android:name="com.theyellowmirror.sightseer.LocationRatingFragment"
         android:id="@+id/rating_frag"
