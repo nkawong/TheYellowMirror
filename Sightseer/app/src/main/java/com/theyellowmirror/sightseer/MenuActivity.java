@@ -142,23 +142,7 @@ public class MenuActivity extends AppCompatActivity
 
 
         //autocomplete drop down search bar
-        address1 = (AutoCompleteTextView) findViewById(R.id.address1);
-        address2 = (AutoCompleteTextView) findViewById(R.id.address2);
-        address3 = (AutoCompleteTextView) findViewById(R.id.address3);
-        address4 = (AutoCompleteTextView) findViewById(R.id.address4);
-        address5 = (AutoCompleteTextView) findViewById(R.id.address5);
-        mGoogleApiClient = new GoogleApiClient
-                .Builder(this)
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .enableAutoManage(this, this)
-                .build();
-        placeAutocompleteAdapter =  new PlaceAutocompleteAdapter(this,mGoogleApiClient,LAT_LNG_BOUNDS,null);
-        address1.setAdapter(placeAutocompleteAdapter);
-        address2.setAdapter(placeAutocompleteAdapter);
-        address3.setAdapter(placeAutocompleteAdapter);
-        address4.setAdapter(placeAutocompleteAdapter);
-        address5.setAdapter(placeAutocompleteAdapter);
+        initAutoComp();
 
         // Retrieve location and camera position from saved instance state.
         if (savedInstanceState != null) {
@@ -180,6 +164,7 @@ public class MenuActivity extends AppCompatActivity
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
         init(address1);
         init(address2);
         init(address3);
@@ -511,7 +496,7 @@ public class MenuActivity extends AppCompatActivity
     }
 
     //init address1-5 so that enter search for the address input
-    private void init(EditText address){
+    private void init(AutoCompleteTextView address){
         address1.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
@@ -570,6 +555,25 @@ public class MenuActivity extends AppCompatActivity
 
     }
 
+    public void initAutoComp(){
+        address1 = (AutoCompleteTextView) findViewById(R.id.address1);
+        address2 = (AutoCompleteTextView) findViewById(R.id.address2);
+        address3 = (AutoCompleteTextView) findViewById(R.id.address3);
+        address4 = (AutoCompleteTextView) findViewById(R.id.address4);
+        address5 = (AutoCompleteTextView) findViewById(R.id.address5);
+        mGoogleApiClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, this)
+                .build();
+        placeAutocompleteAdapter =  new PlaceAutocompleteAdapter(this,mGoogleApiClient,LAT_LNG_BOUNDS,null);
+        address1.setAdapter(placeAutocompleteAdapter);
+        address2.setAdapter(placeAutocompleteAdapter);
+        address3.setAdapter(placeAutocompleteAdapter);
+        address4.setAdapter(placeAutocompleteAdapter);
+        address5.setAdapter(placeAutocompleteAdapter);
+    }
 
 
 

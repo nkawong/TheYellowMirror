@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         skipLink.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent skipIntent = new Intent(LoginActivity.this, HomeActivity.class);
+                Intent skipIntent = new Intent(LoginActivity.this, MenuActivity.class);
                 LoginActivity.this.startActivity(skipIntent);
             }
         });

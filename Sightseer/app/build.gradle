@@ -15,6 +15,7 @@ android {
                 includeCompileClasspath false
             }
         }
+
     }
     buildTypes {
         release {
@@ -51,5 +52,4 @@ dependencies {
     implementation 'com.google.android.gms:play-services-places:15.0.0'
 
 }
-
 apply plugin: 'com.google.gms.google-services'
