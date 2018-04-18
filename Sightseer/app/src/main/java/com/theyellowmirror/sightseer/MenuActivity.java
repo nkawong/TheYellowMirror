@@ -55,6 +55,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 import android.widget.*;
@@ -74,6 +75,8 @@ import java.util.Locale;
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback,GoogleApiClient.OnConnectionFailedListener{
 
+    //FireStore Database
+    private FirebaseFirestore fStore;
 
     //Map
     private static final String TAG = "MenuActivity";
@@ -128,6 +131,7 @@ public class MenuActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+        fStore = FirebaseFirestore.getInstance();   //Initialize firestore db
         //menu bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
