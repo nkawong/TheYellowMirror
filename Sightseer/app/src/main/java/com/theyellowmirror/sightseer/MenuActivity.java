@@ -12,6 +12,7 @@ import android.location.Geocoder;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -65,10 +66,21 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.content.pm.PackageManager;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
+
+import javax.net.ssl.HttpsURLConnection;
 
 
 public class MenuActivity extends AppCompatActivity
@@ -141,6 +153,7 @@ public class MenuActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
+
         //autocomplete drop down search bar
         initAutoComp();
 
@@ -165,11 +178,37 @@ public class MenuActivity extends AppCompatActivity
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        init(address1);
-        init(address2);
-        init(address3);
-        init(address4);
-        init(address5);
+//        init(address1);
+//        init(address2);
+//        init(address3);
+//        init(address4);
+//        init(address5);
+
+        Button geoLocationBt = (Button) findViewById(R.id.startRouteBT);
+        geoLocationBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText searchText = (EditText) findViewById(R.id.address1);
+                String search = searchText.getText().toString();
+                Geocoder geo = new Geocoder(MenuActivity.this);
+                if(geo.isPresent()){
+                    try {
+                        List<Address> addresses = geo.getFromLocationName(search,1);
+                        if (addresses.size()==0){
+                            Toast.makeText(MenuActivity.this,"Failed",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        Address address = addresses.get(0);
+                        LatLng location = new LatLng(address.getLatitude(),address.getLongitude());
+                        moveCamera(location,DEFAULT_ZOOM,"worked!");
+                    } catch (IOException e) {
+                        Toast.makeText(MenuActivity.this,"Network connection to geocoder not working",Toast.LENGTH_SHORT).show();
+
+                    }
+
+                }
+            }
+        });
 
 
 
@@ -517,26 +556,26 @@ public class MenuActivity extends AppCompatActivity
     private void geoLocate(){
         Log.d(TAG, "geoLocate: geolocating");
 
+
         String searchString = address1.getText().toString();
 
         Geocoder geocoder = new Geocoder(MenuActivity.this);
-        List<Address> list = new ArrayList<>();
-        try{
-            list = geocoder.getFromLocationName(searchString, 1);
-        }catch (IOException e){
-            Log.e(TAG, "geoLocate: IOException: " + e.getMessage() );
+        List<Address> addresses = null;
+        try {
+            addresses = geocoder.getFromLocationName(searchString, 1);
+        } catch (IOException e) {
+            Log.d(TAG,"Getting address failed");
+        }
+        if(addresses.size() > 0) {
+            double latitude= addresses.get(0).getLatitude();
+            double longitude= addresses.get(0).getLongitude();
         }
 
-        if(list.size() > 0){
-            Address address = list.get(0);
 
-            Log.d(TAG, "geoLocate: found a location: " + address.toString());
 
-            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM,
-                    address.getAddressLine(0));
 
-        }
     }
+
 
     private void moveCamera(LatLng latLng, float zoom, String title){
         Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
@@ -574,6 +613,9 @@ public class MenuActivity extends AppCompatActivity
         address4.setAdapter(placeAutocompleteAdapter);
         address5.setAdapter(placeAutocompleteAdapter);
     }
+
+    
+
 
 
 
