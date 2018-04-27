@@ -2,11 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.theyellowmirror.sightseer">
 
-
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -31,18 +29,23 @@
         <activity
             android:name=".MenuActivity"
             android:label="SightSeer"
-            android:theme="@style/AppTheme"
-            android:icon="@drawable/sightseer_logo"/>
+            android:theme="@style/AppTheme" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAyWcAbuN-Vxa7ojA-IMq76cobtz8Ap8h4"/>
-            <!--android:value="AIzaSyBik6OHQXRP2TDyD-oQ9HDUviFm159cP9g"/>-->
-        <!--android:value="AIzaSyCoqmv4EOou0fn6TyoJUd2chM_OMTdlppM"/>-->
+            android:value="AIzaSyAJ6cc9JGUZcJJAWz4sgZ-iXPd9wWWWLyc"/>
+            <!--android:value="AIzaSyAyWcAbuN-Vxa7ojA-IMq76cobtz8Ap8h4" />-->
+        <!-- android:value="AIzaSyBik6OHQXRP2TDyD-oQ9HDUviFm159cP9g"/> -->
+        <!-- android:value="AIzaSyCoqmv4EOou0fn6TyoJUd2chM_OMTdlppM"/> -->
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".SettingActivity"
+            android:label="@string/title_activity_setting"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
