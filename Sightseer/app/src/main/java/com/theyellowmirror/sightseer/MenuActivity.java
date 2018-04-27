@@ -66,13 +66,16 @@ import Routing.DirectionFinderListener;
 
 import Distance_DurationCheck.Dis_DurCheck;
 import Distance_DurationCheck.Dis_DurCheckListener;
-
+import javax.net.ssl.HttpsURLConnection;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback,GoogleApiClient.OnConnectionFailedListener,
         DirectionFinderListener,Dis_DurCheckListener{
 
-
+    private FirebaseAuth ref;
     //Map
     private static final String TAG = "MenuActivity";
 
@@ -223,10 +226,25 @@ public class MenuActivity extends AppCompatActivity
         if (id == R.id.nav_setting) {
             Intent settings = new Intent(MenuActivity.this,SettingActivity.class);
             MenuActivity.this.startActivity(settings);
+            // Handle the camera action
+
+            //Will delete user need to make sure user is logged in
+            // if(ref.getCurretnUser() != null){
+            // ref.getCurrentUser().delete();
+            // }
+
+            //Updates Password Need a content menu for settings
+            //ref.getCurrentUser().updatePassword("Password Reset Here");
 
         } else if (id == R.id.nav_history) {
 
         } else if (id == R.id.nav_logout) {
+            if(ref.getCurrentUser() != null){
+                ref.signOut();
+            }
+            else{
+                //null user is not signed in
+            }
 
         }
 
