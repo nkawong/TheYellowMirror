@@ -17,14 +17,24 @@
 
 
             <!-- Here you can replace it with your logo or brand name -->
-            <ImageView
+            <LinearLayout
                 android:layout_width="240dp"
                 android:layout_height="120dp"
                 android:layout_gravity="center_horizontal"
+                android:gravity="center"
                 android:padding="16dp"
                 android:layout_marginTop="48dp"
-                android:layout_marginBottom="20dp"
-                android:src="@drawable/sightseer_logo"/>
+                android:layout_marginBottom="20dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="SightSeer"
+                    android:textSize="60sp"
+                    android:textColor="#fff"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/billabong"/>
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/emailField"
@@ -36,6 +46,8 @@
                 android:drawablePadding="12dp"
                 android:ems="10"
                 android:hint="Username"
+                android:textCursorDrawable="@null"
+                android:textColor="#fff"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:padding="8dp"
@@ -60,6 +72,8 @@
                 android:ems="10"
                 android:hint="Password"
                 android:inputType="textPassword"
+                android:textCursorDrawable="@null"
+                android:textColor="#fff"
                 android:maxLines="1"
                 android:paddingBottom="8dp"
                 android:paddingLeft="8dp"
@@ -82,12 +96,13 @@
                     android:text=" Remember me"
                     android:textColor="#fff"
                     android:padding="8dp"
+                    android:theme="@style/checkBoxStyle"
                     />
 
                 <Button
                     android:id="@+id/skipBT"
                     android:layout_width="wrap_content"
-                    android:layout_height="25dp"
+                    android:layout_height="28dp"
                     android:layout_marginLeft="100dp"
                     android:background="@drawable/background_signup"
                     android:text="Skip"

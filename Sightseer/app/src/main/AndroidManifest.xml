@@ -28,7 +28,6 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MenuActivity"
-            android:icon="@drawable/sightseer_logo"
             android:label="SightSeer"
             android:theme="@style/AppTheme" />
 

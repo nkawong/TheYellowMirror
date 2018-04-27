@@ -202,6 +202,7 @@
                         android:padding="8dp"
                         android:singleLine="true"
                         android:textColor="#fff"
+                        android:textCursorDrawable="@null"
                         android:textColorHint="#ffffff" />
 
                     <EditText
@@ -218,6 +219,7 @@
                         android:padding="8dp"
                         android:singleLine="true"
                         android:textColor="#fff"
+                        android:textCursorDrawable="@null"
                         android:textColorHint="#ffffff" />
                 </LinearLayout>
 
@@ -235,6 +237,7 @@
                     android:inputType="text"
                     android:singleLine="true"
                     android:textColor="#fff"
+                    android:textCursorDrawable="@null"
                     android:maxLines="1"
                     android:padding="8dp"
                     android:textColorHint="#ffffff"/>
@@ -268,6 +271,7 @@
                         android:padding="8dp"
                         android:singleLine="true"
                         android:textColor="#fff"
+                        android:textCursorDrawable="@null"
                         android:textColorHint="#ffffff" />
 
                     <EditText
@@ -284,6 +288,7 @@
                         android:padding="8dp"
                         android:singleLine="true"
                         android:textColor="#fff"
+                        android:textCursorDrawable="@null"
                         android:textColorHint="#ffffff" />
                 </LinearLayout>
 
@@ -301,6 +306,7 @@
                     android:inputType="text"
                     android:singleLine="true"
                     android:textColor="#fff"
+                    android:textCursorDrawable="@null"
                     android:maxLines="1"
                     android:padding="8dp"
                     android:textColorHint="#ffffff"/>
@@ -336,6 +342,7 @@
                     android:padding="8dp"
                     android:singleLine="true"
                     android:textColor="#fff"
+                    android:textCursorDrawable="@null"
                     android:textColorHint="#ffffff" />
 
                 <EditText
@@ -352,6 +359,7 @@
                     android:padding="8dp"
                     android:singleLine="true"
                     android:textColor="#fff"
+                    android:textCursorDrawable="@null"
                     android:textColorHint="#ffffff" />
             </LinearLayout>
 
@@ -368,6 +376,7 @@
                 android:inputType="text"
                 android:singleLine="true"
                 android:textColor="#fff"
+                android:textCursorDrawable="@null"
                 android:imeOptions="actionDone"
                 android:maxLines="1"
                 android:padding="8dp"
@@ -403,6 +412,7 @@
                     android:padding="8dp"
                     android:singleLine="true"
                     android:textColor="#fff"
+                    android:textCursorDrawable="@null"
                     android:textColorHint="#ffffff" />
 
                 <EditText
@@ -419,6 +429,7 @@
                     android:padding="8dp"
                     android:singleLine="true"
                     android:textColor="#fff"
+                    android:textCursorDrawable="@null"
                     android:textColorHint="#ffffff" />
             </LinearLayout>
 
@@ -435,6 +446,7 @@
                 android:inputType="text"
                 android:singleLine="true"
                 android:textColor="#fff"
+                android:textCursorDrawable="@null"
                 android:imeOptions="actionDone"
                 android:maxLines="1"
                 android:padding="8dp"
@@ -471,6 +483,7 @@
                     android:padding="8dp"
                     android:singleLine="true"
                     android:textColor="#fff"
+                    android:textCursorDrawable="@null"
                     android:textColorHint="#ffffff" />
 
                 <EditText
@@ -487,6 +500,7 @@
                     android:padding="8dp"
                     android:singleLine="true"
                     android:textColor="#fff"
+                    android:textCursorDrawable="@null"
                     android:textColorHint="#ffffff" />
             </LinearLayout>
 
@@ -502,6 +516,7 @@
                 android:hint="Address"
                 android:singleLine="true"
                 android:inputType="text"
+                android:textCursorDrawable="@null"
                 android:textColor="#fff"
                 android:imeOptions="actionDone"
                 android:maxLines="1"

@@ -3,6 +3,7 @@ import Distance_DurationCheck.Durations;
 import Distance_DurationCheck.Routes;
 import Routing.*;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Path;
@@ -47,6 +48,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 
+import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import android.util.*;
 import android.support.v4.app.ActivityCompat;
@@ -116,8 +118,6 @@ public class MenuActivity extends AppCompatActivity
     private List<Marker> originMarkers = new ArrayList<>();
     private List<Marker> destinationMarkers = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
-    private ProgressDialog progressDialog;
-    private ProgressDialog progress;
     private int durationTemp;
 
     @Override
@@ -169,6 +169,18 @@ public class MenuActivity extends AppCompatActivity
         init(address3);
         init(address4);
         init(address5);
+
+
+        address1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                in.hideSoftInputFromWindow(arg1.getWindowToken(), 0);
+
+            }
+
+        });
 
         //testing
         startRouteBT = (Button) findViewById(R.id.startRouteBT);
@@ -369,6 +381,16 @@ public class MenuActivity extends AppCompatActivity
 
     //init address1-5 so that enter search for the address input
     private void init(final AutoCompleteTextView address){
+        address.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                in.hideSoftInputFromWindow(arg1.getWindowToken(), 0);
+
+            }
+
+        });
         address.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
@@ -574,6 +596,7 @@ public class MenuActivity extends AppCompatActivity
         }
 
 
+
     }
 
     @Override
@@ -641,18 +664,18 @@ public class MenuActivity extends AppCompatActivity
 
         durationTemp = routes.get(0).duration.value;
     }
-
-    private void fixZoom() {
-        List<LatLng> points = route.getPoints(); // route is instance of PolylineOptions
-
-        LatLngBounds.Builder bc = new LatLngBounds.Builder();
-
-        for (LatLng item : points) {
-            bc.include(item);
-        }
-
-        map.moveCamera(CameraUpdateFactory.newLatLngBounds(bc.build(), 50));
-    }
+//
+//    private void fixZoom() {
+//        List<LatLng> points = route.getPoints(); // route is instance of PolylineOptions
+//
+//        LatLngBounds.Builder bc = new LatLngBounds.Builder();
+//
+//        for (LatLng item : points) {
+//            bc.include(item);
+//        }
+//
+//        map.moveCamera(CameraUpdateFactory.newLatLngBounds(bc.build(), 50));
+//    }
 
 
 
