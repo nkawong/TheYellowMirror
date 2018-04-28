@@ -1,46 +1,35 @@
 package com.theyellowmirror.sightseer;
+import Distance_DurationCheck.Durations;
+import Distance_DurationCheck.Routes;
+import Routing.*;
 
-import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.Path;
+import android.app.ProgressDialog;
 import android.location.Address;
-import android.location.Criteria;
 import android.location.Geocoder;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.*;
-import android.support.v7.app.ActionBar;
-import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.WindowManager;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
-import android.widget.EditText;
 import android.location.Location;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.PlaceDetectionClient;
-import com.google.android.gms.location.places.PlaceLikelihood;
-import com.google.android.gms.location.places.PlaceLikelihoodBufferResponse;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -56,28 +45,41 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 
+import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import android.util.*;
-import android.app.*;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.content.pm.PackageManager;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
+import Routing.DirectionFinder;
+import Routing.DirectionFinderListener;
+
+import Distance_DurationCheck.Dis_DurCheck;
+import Distance_DurationCheck.Dis_DurCheckListener;
+import javax.net.ssl.HttpsURLConnection;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MenuActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback,GoogleApiClient.OnConnectionFailedListener{
+        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback,GoogleApiClient.OnConnectionFailedListener,
+        DirectionFinderListener,Dis_DurCheckListener{
 
     //FireStore Database
     private FirebaseFirestore fStore;
 
+    private FirebaseAuth ref;
     //Map
     private static final String TAG = "MenuActivity";
 
@@ -107,13 +109,6 @@ public class MenuActivity extends AppCompatActivity
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
 
-    // Used for selecting the current place.
-    private static final int M_MAX_ENTRIES = 5;
-    private String[] mLikelyPlaceNames;
-    private String[] mLikelyPlaceAddresses;
-    private String[] mLikelyPlaceAttributions;
-    private LatLng[] mLikelyPlaceLatLngs;
-
     //autocomplete drop down search bar
     private AutoCompleteTextView address1;
     private AutoCompleteTextView address2;
@@ -125,6 +120,12 @@ public class MenuActivity extends AppCompatActivity
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(-40, -168), new LatLng(71, 136));
 
+    //routing
+    private Button startRouteBT;
+    private List<Marker> originMarkers = new ArrayList<>();
+    private List<Marker> destinationMarkers = new ArrayList<>();
+    private List<Polyline> polylinePaths = new ArrayList<>();
+    private int durationTemp;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -143,6 +144,7 @@ public class MenuActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
 
 
         //autocomplete drop down search bar
@@ -169,12 +171,35 @@ public class MenuActivity extends AppCompatActivity
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        //initialize all 5 of the address area
         init(address1);
         init(address2);
         init(address3);
         init(address4);
         init(address5);
 
+
+        address1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                in.hideSoftInputFromWindow(arg1.getWindowToken(), 0);
+
+            }
+
+        });
+
+        //testing
+        startRouteBT = (Button) findViewById(R.id.startRouteBT);
+        startRouteBT.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                startRout();
+
+            }
+        });
 
 
     }
@@ -204,10 +229,27 @@ public class MenuActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_setting) {
+            Intent settings = new Intent(MenuActivity.this,SettingActivity.class);
+            MenuActivity.this.startActivity(settings);
             // Handle the camera action
+
+            //Will delete user need to make sure user is logged in
+            // if(ref.getCurretnUser() != null){
+            // ref.getCurrentUser().delete();
+            // }
+
+            //Updates Password Need a content menu for settings
+            //ref.getCurrentUser().updatePassword("Password Reset Here");
+
         } else if (id == R.id.nav_history) {
 
         } else if (id == R.id.nav_logout) {
+            if(ref.getCurrentUser() != null){
+                ref.signOut();
+            }
+            else{
+                //null user is not signed in
+            }
 
         }
 
@@ -238,7 +280,8 @@ public class MenuActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.option_get_place) {
-            showCurrentPlace();
+            moveCamera(new LatLng(mLastKnownLocation.getLatitude(),
+                    mLastKnownLocation.getLongitude()), DEFAULT_ZOOM, "My Location");
         }
         return true;
     }
@@ -250,32 +293,6 @@ public class MenuActivity extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
-
-        // Use a custom info window adapter to handle multiple lines of text in the
-        // info window contents.
-        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-
-            @Override
-            // Return null here, so that getInfoContents() is called next.
-            public View getInfoWindow(Marker arg0) {
-                return null;
-            }
-
-            @Override
-            public View getInfoContents(Marker marker) {
-                // Inflate the layouts for the info window, title and snippet.
-                View infoWindow = getLayoutInflater().inflate(R.layout.custom_info_contents,
-                        (FrameLayout) findViewById(R.id.map), false);
-
-                TextView title = ((TextView) infoWindow.findViewById(R.id.title));
-                title.setText(marker.getTitle());
-
-                TextView snippet = ((TextView) infoWindow.findViewById(R.id.snippet));
-                snippet.setText(marker.getSnippet());
-
-                return infoWindow;
-            }
-        });
 
         // Prompt the user for permission.
         getLocationPermission();
@@ -304,9 +321,6 @@ public class MenuActivity extends AppCompatActivity
                         if (task.isSuccessful()) {
                             // Set the map's camera position to the current location of the device.
                             mLastKnownLocation = task.getResult();
-//                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-//                                    new LatLng(mLastKnownLocation.getLatitude(),
-//                                            mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
                             moveCamera(new LatLng(mLastKnownLocation.getLatitude(),
                                             mLastKnownLocation.getLongitude()), DEFAULT_ZOOM, "My Location");
                         } else {
@@ -365,117 +379,6 @@ public class MenuActivity extends AppCompatActivity
         updateLocationUI();
     }
 
-    /**
-     * Prompts the user to select the current place from a list of likely places, and shows the
-     * current place on the map - provided the user has granted location permission.
-     */
-    private void showCurrentPlace() {
-        if (mMap == null) {
-            return;
-        }
-
-        if (mLocationPermissionGranted) {
-            // Get the likely places - that is, the businesses and other points of interest that
-            // are the best match for the device's current location.
-            @SuppressWarnings("MissingPermission") final
-            Task<PlaceLikelihoodBufferResponse> placeResult =
-                    mPlaceDetectionClient.getCurrentPlace(null);
-            placeResult.addOnCompleteListener
-                    (new OnCompleteListener<PlaceLikelihoodBufferResponse>() {
-                        @Override
-                        public void onComplete(@NonNull Task<PlaceLikelihoodBufferResponse> task) {
-                            if (task.isSuccessful() && task.getResult() != null) {
-                                PlaceLikelihoodBufferResponse likelyPlaces = task.getResult();
-
-                                // Set the count, handling cases where less than 5 entries are returned.
-                                int count;
-                                if (likelyPlaces.getCount() < M_MAX_ENTRIES) {
-                                    count = likelyPlaces.getCount();
-                                } else {
-                                    count = M_MAX_ENTRIES;
-                                }
-
-                                int i = 0;
-                                mLikelyPlaceNames = new String[count];
-                                mLikelyPlaceAddresses = new String[count];
-                                mLikelyPlaceAttributions = new String[count];
-                                mLikelyPlaceLatLngs = new LatLng[count];
-
-                                for (PlaceLikelihood placeLikelihood : likelyPlaces) {
-                                    // Build a list of likely places to show the user.
-                                    mLikelyPlaceNames[i] = (String) placeLikelihood.getPlace().getName();
-                                    mLikelyPlaceAddresses[i] = (String) placeLikelihood.getPlace()
-                                            .getAddress();
-                                    mLikelyPlaceAttributions[i] = (String) placeLikelihood.getPlace()
-                                            .getAttributions();
-                                    mLikelyPlaceLatLngs[i] = placeLikelihood.getPlace().getLatLng();
-
-                                    i++;
-                                    if (i > (count - 1)) {
-                                        break;
-                                    }
-                                }
-
-                                // Release the place likelihood buffer, to avoid memory leaks.
-                                likelyPlaces.release();
-
-                                // Show a dialog offering the user the list of likely places, and add a
-                                // marker at the selected place.
-                                openPlacesDialog();
-
-                            } else {
-                                Log.e(TAG, "Exception: %s", task.getException());
-                            }
-                        }
-                    });
-        } else {
-            // The user has not granted permission.
-            Log.i(TAG, "The user did not grant location permission.");
-
-            // Add a default marker, because the user hasn't selected a place.
-            mMap.addMarker(new MarkerOptions()
-                    .title(getString(R.string.default_info_title))
-                    .position(mDefaultLocation)
-                    .snippet(getString(R.string.default_info_snippet)));
-
-            // Prompt the user for permission.
-            getLocationPermission();
-        }
-    }
-
-    /**
-     * Displays a form allowing the user to select a place from a list of likely places.
-     */
-    private void openPlacesDialog() {
-        // Ask the user to choose the place where they are now.
-        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // The "which" argument contains the position of the selected item.
-                LatLng markerLatLng = mLikelyPlaceLatLngs[which];
-                String markerSnippet = mLikelyPlaceAddresses[which];
-                if (mLikelyPlaceAttributions[which] != null) {
-                    markerSnippet = markerSnippet + "\n" + mLikelyPlaceAttributions[which];
-                }
-
-//                // Add a marker for the selected place, with an info window
-//                // showing information about that place.
-//                mMap.addMarker(new MarkerOptions()
-//                        .title(mLikelyPlaceNames[which])
-//                        .position(markerLatLng)
-//                        .snippet(markerSnippet));
-
-                // Position the map's camera at the location of the marker.
-                moveCamera(markerLatLng, DEFAULT_ZOOM, "My Location");
-            }
-        };
-
-        // Display the dialog.
-        android.support.v7.app.AlertDialog dialog = new android.support.v7.app.AlertDialog.Builder(this)
-                .setTitle(R.string.pick_place)
-                .setItems(mLikelyPlaceNames, listener)
-                .show();
-    }
 
     /**
      * Updates the map's UI settings based on whether the user has granted location permission.
@@ -500,8 +403,18 @@ public class MenuActivity extends AppCompatActivity
     }
 
     //init address1-5 so that enter search for the address input
-    private void init(AutoCompleteTextView address){
-        address1.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+    private void init(final AutoCompleteTextView address){
+        address.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                in.hideSoftInputFromWindow(arg1.getWindowToken(), 0);
+
+            }
+
+        });
+        address.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 if(actionId == EditorInfo.IME_ACTION_SEARCH
@@ -510,7 +423,7 @@ public class MenuActivity extends AppCompatActivity
                         || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER){
 
                     //execute our method for searching
-                    geoLocate();
+                    geoLocate(address);
                 }
 
                 return false;
@@ -518,29 +431,32 @@ public class MenuActivity extends AppCompatActivity
         });
     }
 
-    private void geoLocate(){
+    private void geoLocate(AutoCompleteTextView address){
         Log.d(TAG, "geoLocate: geolocating");
 
-        String searchString = address1.getText().toString();
 
-        Geocoder geocoder = new Geocoder(MenuActivity.this);
-        List<Address> list = new ArrayList<>();
-        try{
-            list = geocoder.getFromLocationName(searchString, 1);
-        }catch (IOException e){
-            Log.e(TAG, "geoLocate: IOException: " + e.getMessage() );
+        String search = address.getText().toString();
+        Geocoder geo = new Geocoder(MenuActivity.this);
+        if(geo.isPresent()){
+            try {
+                List<Address> addresses = geo.getFromLocationName(search,1);
+                if (addresses.size()==0){
+                    Toast.makeText(MenuActivity.this,"Address locating failed, please enter the full address",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Address temp = addresses.get(0);
+                LatLng location = new LatLng(temp.getLatitude(),temp.getLongitude());
+                moveCamera(location,DEFAULT_ZOOM,"worked!");
+            } catch (IOException e) {
+                Toast.makeText(MenuActivity.this,"Network connection to geocoder not working",Toast.LENGTH_SHORT).show();
+
+            }
+
         }
 
-        if(list.size() > 0){
-            Address address = list.get(0);
 
-            Log.d(TAG, "geoLocate: found a location: " + address.toString());
-
-            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM,
-                    address.getAddressLine(0));
-
-        }
     }
+
 
     private void moveCamera(LatLng latLng, float zoom, String title){
         Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
@@ -578,6 +494,211 @@ public class MenuActivity extends AppCompatActivity
         address4.setAdapter(placeAutocompleteAdapter);
         address5.setAdapter(placeAutocompleteAdapter);
     }
+    private String[] addressOrderArray = new String[5];
+    private ArrayList<String> notOrdered;
+
+    public void ordering(){
+
+        for(int i =0;i<5;i++){
+            addressOrderArray[i]=null;
+        }
+
+        notOrdered = new ArrayList<>();
+
+        String o2=((EditText) findViewById(R.id.order2)).getText().toString();
+        String o3=((EditText) findViewById(R.id.order3)).getText().toString();
+        String o4=((EditText) findViewById(R.id.order4)).getText().toString();
+        String o5=((EditText) findViewById(R.id.order5)).getText().toString();
+
+        int io2,io3,io4,io5;
+
+        String a1 = address1.getText().toString();
+        String a2 = address2.getText().toString();
+        String a3 = address3.getText().toString();
+        String a4 = address4.getText().toString();
+        String a5 = address5.getText().toString();
+        //starting address
+        addressOrderArray[0]=a1;
+
+        if(o2.matches("1|2|3|4|5")){
+            io2 =Integer.parseInt(o2);
+            if(io2==1) addressOrderArray[0]=a2;
+            else if(io2==2) addressOrderArray[1]=a2;
+            else if(io2==3) addressOrderArray[2]=a2;
+            else if(io2==4) addressOrderArray[3]=a2;
+            else if(io2==5) addressOrderArray[4]=a2;
+        }
+        else notOrdered.add(a2);
+        if(o3.matches("1|2|3|4|5")){
+            io3 =Integer.parseInt(o3);
+            if(io3==1) addressOrderArray[0]=a3;
+            else if(io3==2) addressOrderArray[1]=a3;
+            else if(io3==3) addressOrderArray[2]=a3;
+            else if(io3==4) addressOrderArray[3]=a3;
+            else if(io3==5) addressOrderArray[4]=a3;
+        }
+        else notOrdered.add(a3);
+        if(o4.matches("1|2|3|4|5")){
+            io4 =Integer.parseInt(o4);
+            if(io4==1) addressOrderArray[0]=a4;
+            else if(io4==2) addressOrderArray[1]=a4;
+            else if(io4==3) addressOrderArray[2]=a4;
+            else if(io4==4) addressOrderArray[3]=a4;
+            else if(io4==5) addressOrderArray[4]=a4;
+        }
+        else notOrdered.add(a4);
+        if(o5.matches("1|2|3|4|5")){
+            io5 =Integer.parseInt(o5);
+            if(io5==1) addressOrderArray[0]=a5;
+            else if(io5==2) addressOrderArray[1]=a5;
+            else if(io5==3) addressOrderArray[2]=a5;
+            else if(io5==4) addressOrderArray[3]=a5;
+            else if(io5==5) addressOrderArray[4]=a5;
+        }
+        else notOrdered.add(a5);
+
+        for(int i =1;i<5;i++){
+            if(addressOrderArray[i]==null){
+
+                int min=0;
+                String endMin =null;
+                for(String temp: notOrdered){
+                    try {
+                        Log.d(TAG,"now"+addressOrderArray[i-1]);
+                        Log.d(TAG,"temp"+temp);
+                        new Dis_DurCheck(this,addressOrderArray[i-1],temp).execute();
+                        if(min==0) {
+                            min=durationTemp;
+                            endMin = temp;
+                        }
+                        if(durationTemp<min) {
+                            min=durationTemp;
+                            endMin = temp;
+                        }
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                }
+                addressOrderArray[i] = endMin;
+                notOrdered.remove(endMin);
+            }
+        }
+
+
+
+    }
+    public void startRout(){
+
+        ordering();
+        try{
+            new DirectionFinder(this,addressOrderArray[0],addressOrderArray[1]).execute();
+        }
+        catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+        }
+
+        try{
+            new DirectionFinder(this,addressOrderArray[1],addressOrderArray[2]).execute();
+        }
+        catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+        }
+
+        try{
+            new DirectionFinder(this,addressOrderArray[2],addressOrderArray[3]).execute();
+        }
+        catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+        }
+
+        try{
+            new DirectionFinder(this,addressOrderArray[3],addressOrderArray[4]).execute();
+        }
+        catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+        }
+
+
+
+    }
+
+    @Override
+    public void onDirectionFinderStart() {
+
+        if (originMarkers != null) {
+            for (Marker marker : originMarkers) {
+                marker.remove();
+            }
+        }
+
+        if (destinationMarkers != null) {
+            for (Marker marker : destinationMarkers) {
+                marker.remove();
+            }
+        }
+
+        if (polylinePaths != null) {
+            for (Polyline polyline:polylinePaths ) {
+                polyline.remove();
+            }
+        }
+    }
+
+    @Override
+    public void onDirectionFinderSuccess(List<Route> routes) {
+        polylinePaths = new ArrayList<>();
+        originMarkers = new ArrayList<>();
+        destinationMarkers = new ArrayList<>();
+
+        for (Route route : routes) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
+            ((TextView) findViewById(R.id.timeLeftTV)).setText(route.duration.text);
+            ((TextView) findViewById(R.id.mileLeftTV)).setText(route.distance.text);
+
+            originMarkers.add(mMap.addMarker(new MarkerOptions()
+                    .title(route.startAddress)
+                    .position(route.startLocation)));
+            destinationMarkers.add(mMap.addMarker(new MarkerOptions()
+                    .title(route.endAddress)
+                    .position(route.endLocation)));
+
+            PolylineOptions polylineOptions = new PolylineOptions().
+                    geodesic(true).
+                    color(Color.BLUE).
+                    width(10);
+
+            for (int i = 0; i < route.points.size(); i++)
+                polylineOptions.add(route.points.get(i));
+
+            polylinePaths.add(mMap.addPolyline(polylineOptions));
+        }
+
+    }
+
+
+    @Override
+    public void onDis_DurStart() {
+
+
+    }
+
+    @Override
+    public void onDis_DurSuccess(List<Routes> routes) {
+
+        durationTemp = routes.get(0).duration.value;
+    }
+//
+//    private void fixZoom() {
+//        List<LatLng> points = route.getPoints(); // route is instance of PolylineOptions
+//
+//        LatLngBounds.Builder bc = new LatLngBounds.Builder();
+//
+//        for (LatLng item : points) {
+//            bc.include(item);
+//        }
+//
+//        map.moveCamera(CameraUpdateFactory.newLatLngBounds(bc.build(), 50));
+//    }
 
 
 

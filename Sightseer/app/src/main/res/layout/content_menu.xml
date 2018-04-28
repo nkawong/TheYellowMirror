@@ -26,11 +26,6 @@
     sothree:umanoShadowHeight="4dp">
 
 
-    <!--<com.google.android.gms.maps.MapView-->
-    <!--android:id="@+id/mapView"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent" />-->
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -73,7 +68,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/latitude_text"
+                    android:id="@+id/timeLeft"
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
@@ -84,7 +79,7 @@
                     android:textSize="14dp" />
 
                 <TextView
-                    android:id="@+id/longitude_text"
+                    android:id="@+id/mileLeft"
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
@@ -189,31 +184,43 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingTop="8dp">
+
                     <EditText
                         android:id="@+id/order1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="Order"
-                        android:textColorHint="#ffffff"
-                        android:ems="10"
-                        android:maxLines="1"
+                        android:background="@android:color/transparent"
                         android:drawablePadding="12dp"
                         android:drawableStart="@drawable/order"
-                        android:background="@android:color/transparent"
-                        android:padding="8dp"/>
+                        android:ems="10"
+                        android:hint="Starting Address"
+                        android:editable="false"
+                        android:inputType="none"
+                        android:maxLines="1"
+                        android:padding="8dp"
+                        android:singleLine="true"
+                        android:textColor="#fff"
+                        android:textCursorDrawable="@null"
+                        android:textColorHint="#ffffff" />
+
                     <EditText
                         android:id="@+id/time1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="minutes"
-                        android:textColorHint="#ffffff"
-                        android:ems="10"
-                        android:maxLines="1"
+                        android:background="@android:color/transparent"
                         android:drawablePadding="12dp"
                         android:drawableStart="@drawable/minutes"
+                        android:ems="10"
+                        android:hint="minutes"
+                        android:inputType="number"
+                        android:maxLines="1"
                         android:padding="8dp"
-                        android:background="@android:color/transparent"/>
+                        android:singleLine="true"
+                        android:textColor="#fff"
+                        android:textCursorDrawable="@null"
+                        android:textColorHint="#ffffff" />
                 </LinearLayout>
 
 
@@ -230,9 +237,10 @@
                     android:inputType="text"
                     android:singleLine="true"
                     android:textColor="#fff"
+                    android:textCursorDrawable="@null"
                     android:maxLines="1"
                     android:padding="8dp"
-                    android:textColorHint="#ffffff" />
+                    android:textColorHint="#ffffff"/>
 
 
                 <View
@@ -245,31 +253,43 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingTop="8dp">
+
                     <EditText
                         android:id="@+id/order2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="Order"
-                        android:textColorHint="#ffffff"
-                        android:ems="10"
-                        android:maxLines="1"
+                        android:background="@android:color/transparent"
                         android:drawablePadding="12dp"
                         android:drawableStart="@drawable/order"
-                        android:background="@android:color/transparent"
-                        android:padding="8dp"/>
+                        android:ems="10"
+                        android:hint="Order"
+                        android:imeOptions="actionDone"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:padding="8dp"
+                        android:singleLine="true"
+                        android:textColor="#fff"
+                        android:textCursorDrawable="@null"
+                        android:textColorHint="#ffffff" />
+
                     <EditText
                         android:id="@+id/time2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="minutes"
-                        android:textColorHint="#ffffff"
-                        android:ems="10"
-                        android:maxLines="1"
+                        android:background="@android:color/transparent"
                         android:drawablePadding="12dp"
                         android:drawableStart="@drawable/minutes"
+                        android:ems="10"
+                        android:hint="minutes"
+                        android:inputType="number"
+                        android:maxLines="1"
                         android:padding="8dp"
-                        android:background="@android:color/transparent"/>
+                        android:singleLine="true"
+                        android:textColor="#fff"
+                        android:textCursorDrawable="@null"
+                        android:textColorHint="#ffffff" />
                 </LinearLayout>
 
 
@@ -286,6 +306,7 @@
                     android:inputType="text"
                     android:singleLine="true"
                     android:textColor="#fff"
+                    android:textCursorDrawable="@null"
                     android:maxLines="1"
                     android:padding="8dp"
                     android:textColorHint="#ffffff"/>
@@ -303,31 +324,43 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingTop="8dp">
+
                 <EditText
                     android:id="@+id/order3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Order"
-                    android:textColorHint="#ffffff"
-                    android:ems="10"
-                    android:maxLines="1"
+                    android:background="@android:color/transparent"
                     android:drawablePadding="12dp"
                     android:drawableStart="@drawable/order"
-                    android:background="@android:color/transparent"
-                    android:padding="8dp"/>
+                    android:ems="10"
+                    android:hint="Order"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:singleLine="true"
+                    android:textColor="#fff"
+                    android:textCursorDrawable="@null"
+                    android:textColorHint="#ffffff" />
+
                 <EditText
                     android:id="@+id/time3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="minutes"
-                    android:textColorHint="#ffffff"
-                    android:ems="10"
-                    android:maxLines="1"
+                    android:background="@android:color/transparent"
                     android:drawablePadding="12dp"
                     android:drawableStart="@drawable/minutes"
+                    android:ems="10"
+                    android:hint="minutes"
+                    android:inputType="number"
+                    android:maxLines="1"
                     android:padding="8dp"
-                    android:background="@android:color/transparent"/>
+                    android:singleLine="true"
+                    android:textColor="#fff"
+                    android:textCursorDrawable="@null"
+                    android:textColorHint="#ffffff" />
             </LinearLayout>
 
 
@@ -343,6 +376,7 @@
                 android:inputType="text"
                 android:singleLine="true"
                 android:textColor="#fff"
+                android:textCursorDrawable="@null"
                 android:imeOptions="actionDone"
                 android:maxLines="1"
                 android:padding="8dp"
@@ -360,31 +394,43 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingTop="8dp">
+
                 <EditText
                     android:id="@+id/order4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Order"
-                    android:textColorHint="#ffffff"
-                    android:ems="10"
-                    android:maxLines="1"
+                    android:background="@android:color/transparent"
                     android:drawablePadding="12dp"
                     android:drawableStart="@drawable/order"
-                    android:background="@android:color/transparent"
-                    android:padding="8dp"/>
+                    android:ems="10"
+                    android:hint="Order"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:singleLine="true"
+                    android:textColor="#fff"
+                    android:textCursorDrawable="@null"
+                    android:textColorHint="#ffffff" />
+
                 <EditText
                     android:id="@+id/time4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="minutes"
-                    android:textColorHint="#ffffff"
-                    android:ems="10"
-                    android:maxLines="1"
+                    android:background="@android:color/transparent"
                     android:drawablePadding="12dp"
                     android:drawableStart="@drawable/minutes"
+                    android:ems="10"
+                    android:hint="minutes"
+                    android:inputType="number"
+                    android:maxLines="1"
                     android:padding="8dp"
-                    android:background="@android:color/transparent"/>
+                    android:singleLine="true"
+                    android:textColor="#fff"
+                    android:textCursorDrawable="@null"
+                    android:textColorHint="#ffffff" />
             </LinearLayout>
 
 
@@ -400,6 +446,7 @@
                 android:inputType="text"
                 android:singleLine="true"
                 android:textColor="#fff"
+                android:textCursorDrawable="@null"
                 android:imeOptions="actionDone"
                 android:maxLines="1"
                 android:padding="8dp"
@@ -414,35 +461,47 @@
 
 
 
-            <!--address 3-->
+            <!--address 5-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingTop="8dp">
+
                 <EditText
                     android:id="@+id/order5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Order"
-                    android:textColorHint="#ffffff"
-                    android:ems="10"
-                    android:maxLines="1"
+                    android:background="@android:color/transparent"
                     android:drawablePadding="12dp"
                     android:drawableStart="@drawable/order"
-                    android:background="@android:color/transparent"
-                    android:padding="8dp"/>
+                    android:ems="10"
+                    android:hint="Order"
+                    android:inputType="number"
+                    android:imeOptions="actionDone"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:singleLine="true"
+                    android:textColor="#fff"
+                    android:textCursorDrawable="@null"
+                    android:textColorHint="#ffffff" />
+
                 <EditText
                     android:id="@+id/time5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="minutes"
-                    android:textColorHint="#ffffff"
-                    android:ems="10"
-                    android:maxLines="1"
+                    android:background="@android:color/transparent"
                     android:drawablePadding="12dp"
                     android:drawableStart="@drawable/minutes"
+                    android:ems="10"
+                    android:hint="minutes"
+                    android:inputType="number"
+                    android:maxLines="1"
                     android:padding="8dp"
-                    android:background="@android:color/transparent"/>
+                    android:singleLine="true"
+                    android:textColor="#fff"
+                    android:textCursorDrawable="@null"
+                    android:textColorHint="#ffffff" />
             </LinearLayout>
 
 
@@ -457,6 +516,7 @@
                 android:hint="Address"
                 android:singleLine="true"
                 android:inputType="text"
+                android:textCursorDrawable="@null"
                 android:textColor="#fff"
                 android:imeOptions="actionDone"
                 android:maxLines="1"
