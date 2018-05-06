@@ -17,21 +17,13 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#00BFFF"
+            android:layout_height="47dp"
+            android:background="#B0E2FF"
             app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
 
 
     </android.support.design.widget.AppBarLayout>
-
-
-    <!--<Button-->
-        <!--android:id="@+id/menuButton"-->
-        <!--android:layout_margin="10dp"-->
-        <!--android:layout_width="35dp"-->
-        <!--android:layout_height="35dp"-->
-        <!--android:background="@drawable/menubutton"/>-->
 
 
 

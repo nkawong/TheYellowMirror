@@ -5,7 +5,9 @@ import Routing.*;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,6 +26,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.PlaceDetectionClient;
 import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -66,14 +69,14 @@ public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback,GoogleApiClient.OnConnectionFailedListener,
         DirectionFinderListener,Dis_DurCheckListener{
 
+    //firebase authorization, used for sign out
     private FirebaseAuth ref;
-    //Map
+
     private static final String TAG = "MenuActivity";
 
     //get device location
     private GoogleMap mMap;
     private CameraPosition mCameraPosition;
-
 
     // The entry point to the Fused Location Provider.
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -85,7 +88,7 @@ public class MenuActivity extends AppCompatActivity
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean mLocationPermissionGranted;
 
-    // The geographical location where the device is currently located. That is, the last-known
+    // The geographical location where the device is currently located. The last-known
     // location retrieved by the Fused Location Provider.
     private Location mLastKnownLocation;
 
@@ -110,11 +113,24 @@ public class MenuActivity extends AppCompatActivity
     private Spinner order4;
     private Spinner order5;
 
+    //est time
+    private EditText time1;
+    private EditText time2;
+    private EditText time3;
+    private EditText time4;
+    private EditText time5;
+    private TextView totalTime;
+
     //routing
     private Button startRouteBT;
     private List<Polyline> polylinePaths = new ArrayList<>();
     private List<Marker> markers = new ArrayList<>();
-    private int durationTemp;
+    private int distanceTemp;
+    private int minuteTemp;
+
+    //keep track of number of markers/ployline
+    private int numOfMarkers =0;
+    private int numOfPolyline =0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -123,8 +139,6 @@ public class MenuActivity extends AppCompatActivity
 
         //init menu,action bar, navigation view
         initMenu();
-
-
 
         // Retrieve location and camera position from saved instance state.
         if (savedInstanceState != null) {
@@ -138,17 +152,11 @@ public class MenuActivity extends AppCompatActivity
         //autocomplete drop down search bar
         initAutoComp();
 
+        //initialize order spinner drop down bar
         initOrderDropDown();
-
-
 
         //init Start Route Button
         initStartRouteButton();
-
-        // Construct a GeoDataClient.
-//        mGeoDataClient = Places.getGeoDataClient(this, null);
-        // Construct a PlaceDetectionClient.
-//        mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
 
 
     }
@@ -216,8 +224,7 @@ public class MenuActivity extends AppCompatActivity
         });
     }
 
-//    ArrayList<String> nums = new ArrayList<>();
-    String[] nums ={"-","2","3","4","5"};
+    ArrayList<String> nums = new ArrayList<>();
     ArrayAdapter<String> orderNumAdapter;
     public void initOrderDropDown(){
         order2 =  findViewById(R.id.order2);
@@ -225,54 +232,65 @@ public class MenuActivity extends AppCompatActivity
         order4 =  findViewById(R.id.order4);
         order5 =  findViewById(R.id.order5);
 
-//        nums.add("-");
-//        nums.add("2");
-//        nums.add("3");
-//        nums.add("4");
-//        nums.add("5");
+        nums.add("-");
+        nums.add("2");
+        nums.add("3");
+        nums.add("4");
+        nums.add("5");
 
-        orderNumAdapter = new ArrayAdapter<String>(this,android.R.layout.select_dialog_singlechoice, nums);
+        orderNumAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item, nums);
+        orderNumAdapter.setDropDownViewResource(R.layout.spinner_item);
 
         order2.setAdapter(orderNumAdapter);
         order3.setAdapter(orderNumAdapter);
         order4.setAdapter(orderNumAdapter);
         order5.setAdapter(orderNumAdapter);
 
-//        changeOrderDropDown(order2);
-//        changeOrderDropDown(order3);
-//        changeOrderDropDown(order4);
-//        changeOrderDropDown(order5);
-
+        changeSpinnerTextColor(order2);
+        changeSpinnerTextColor(order3);
+        changeSpinnerTextColor(order4);
+        changeSpinnerTextColor(order5);
 
     }
+    public void changeSpinnerTextColor(Spinner spinner){
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE); /* if you want your item to be white */
+            }
 
-    //the dropdown bar from order changes when a item is selected
-//    private void changeOrderDropDown(final AutoCompleteTextView order){
-//        order.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-//                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                in.hideSoftInputFromWindow(arg1.getApplicationWindowToken(), 0);
-//
-//                nums.remove(order.getText().toString());
-//                orderNumAdapter = new ArrayAdapter<String>(MenuActivity.this,android.R.layout.select_dialog_singlechoice, nums);
-//                order.setAdapter(orderNumAdapter);
-//
-//            }
-//
-//        });
-//    }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+    }
+
 
     public void initStartRouteButton(){
+        //clear previous data
+        if (markers != null) {
+            for (Marker marker : markers) {
+                marker.remove();
+            }
+        }
+
+
+        if (polylinePaths != null) {
+            for (Polyline polyline:polylinePaths ) {
+                polyline.remove();
+            }
+        }
         final SlidingUpPanelLayout mLayout= (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
-        //testing
+
         startRouteBT = (Button) findViewById(R.id.startRouteBT);
         startRouteBT.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
-                counter=0;
+                minuteTemp=0;
+                numOfPolyline=0;
+                numOfMarkers=0;
+                counterOfDirFindSucc=0;
                 startRout();
                 mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
 
@@ -286,8 +304,6 @@ public class MenuActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
         }
     }
 
@@ -505,10 +521,10 @@ public class MenuActivity extends AppCompatActivity
 
         notOrdered = new ArrayList<>();
 
-        String o2=((EditText) findViewById(R.id.order2)).getText().toString();
-        String o3=((EditText) findViewById(R.id.order3)).getText().toString();
-        String o4=((EditText) findViewById(R.id.order4)).getText().toString();
-        String o5=((EditText) findViewById(R.id.order5)).getText().toString();
+        String o2=((Spinner) findViewById(R.id.order2)).getSelectedItem().toString();
+        String o3=((Spinner) findViewById(R.id.order3)).getSelectedItem().toString();
+        String o4=((Spinner) findViewById(R.id.order4)).getSelectedItem().toString();
+        String o5=((Spinner) findViewById(R.id.order5)).getSelectedItem().toString();
 
         int io2,io3,io4,io5;
 
@@ -520,6 +536,7 @@ public class MenuActivity extends AppCompatActivity
 
         //starting address
         addressOrderArray[0]=a1;
+        numOfMarkers++;
 
         if(o2.matches("1|2|3|4|5")){
             io2 =Integer.parseInt(o2);
@@ -528,8 +545,12 @@ public class MenuActivity extends AppCompatActivity
             else if(io2==3) addressOrderArray[2]=a2;
             else if(io2==4) addressOrderArray[3]=a2;
             else if(io2==5) addressOrderArray[4]=a2;
+            numOfMarkers++;
         }
-        else if(!a2.matches(""))notOrdered.add(a2);
+        else if(!a2.matches("")){
+            notOrdered.add(a2);
+            numOfMarkers++;
+        }
 
         if(o3.matches("1|2|3|4|5")){
             io3 =Integer.parseInt(o3);
@@ -538,8 +559,12 @@ public class MenuActivity extends AppCompatActivity
             else if(io3==3) addressOrderArray[2]=a3;
             else if(io3==4) addressOrderArray[3]=a3;
             else if(io3==5) addressOrderArray[4]=a3;
+            numOfMarkers++;
         }
-        else if(!a3.matches(""))notOrdered.add(a3);
+        else if(!a3.matches("")){
+            notOrdered.add(a3);
+            numOfMarkers++;
+        }
 
         if(o4.matches("1|2|3|4|5")){
             io4 =Integer.parseInt(o4);
@@ -548,8 +573,12 @@ public class MenuActivity extends AppCompatActivity
             else if(io4==3) addressOrderArray[2]=a4;
             else if(io4==4) addressOrderArray[3]=a4;
             else if(io4==5) addressOrderArray[4]=a4;
+            numOfMarkers++;
         }
-        else if(!a4.matches(""))notOrdered.add(a4);
+        else if(!a4.matches("")){
+            notOrdered.add(a4);
+            numOfMarkers++;
+        }
 
         if(o5.matches("1|2|3|4|5")){
             io5 =Integer.parseInt(o5);
@@ -558,8 +587,12 @@ public class MenuActivity extends AppCompatActivity
             else if(io5==3) addressOrderArray[2]=a5;
             else if(io5==4) addressOrderArray[3]=a5;
             else if(io5==5) addressOrderArray[4]=a5;
+            numOfMarkers++;
         }
-        else if(!a5.matches(""))notOrdered.add(a5);
+        else if(!a5.matches("")){
+            notOrdered.add(a5);
+            numOfMarkers++;
+        }
 
         for(int i =1;i<5;i++){
             if(addressOrderArray[i]==null){
@@ -570,18 +603,16 @@ public class MenuActivity extends AppCompatActivity
                     try {
                         new Dis_DurCheck(this,addressOrderArray[i-1],temp).execute();
 
-
-
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-                    Log.d(TAG,temp+durationTemp);
+                    Log.d(TAG,temp+distanceTemp);
                     if(min==0) {
-                        min=durationTemp;
+                        min=distanceTemp;
                         endMin = temp;
                     }
-                    else if(durationTemp<min) {
-                        min=durationTemp;
+                    else if(distanceTemp<min) {
+                        min=distanceTemp;
                         endMin = temp;
                     }
                 }
@@ -594,7 +625,6 @@ public class MenuActivity extends AppCompatActivity
 
     }
 
-    private int counter =0;
     public void startRout(){
 
         ordering();
@@ -643,51 +673,71 @@ public class MenuActivity extends AppCompatActivity
     @Override
     public void onDirectionFinderStart() {
 
-        if (markers != null) {
-            for (Marker marker : markers) {
-                marker.remove();
-            }
-        }
 
-
-        if (polylinePaths != null) {
-            for (Polyline polyline:polylinePaths ) {
-                polyline.remove();
-            }
-        }
     }
 
+    private int counterOfDirFindSucc;
     @Override
     public void onDirectionFinderSuccess(List<Route> routes) {
 
         for (Route route : routes) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
 
+            //first time enter this method, add both markers
+            if(counterOfDirFindSucc==0){
+                markers.add(mMap.addMarker(new MarkerOptions()
+                        .title(route.startAddress)
+                        .icon(BitmapDescriptorFactory
+                                .defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                        .position(route.startLocation)));
+                markers.add(mMap.addMarker(new MarkerOptions()
+                        .title(route.endAddress)
+                        .icon(BitmapDescriptorFactory
+                                .defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                        .position(route.endLocation)));
+            }
+            //just add the additional address as marker
+            else{
+                if(counterOfDirFindSucc==1) {
+                    markers.add(mMap.addMarker(new MarkerOptions()
+                            .title(route.endAddress)
+                            .icon(BitmapDescriptorFactory
+                                    .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                            .position(route.endLocation)));
+                }
+                else if(counterOfDirFindSucc==2) {
+                    markers.add(mMap.addMarker(new MarkerOptions()
+                            .title(route.endAddress)
+                            .icon(BitmapDescriptorFactory
+                                    .defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                            .position(route.endLocation)));
+                }
+                else{
+                    markers.add(mMap.addMarker(new MarkerOptions()
+                            .title(route.endAddress)
+                            .icon(BitmapDescriptorFactory
+                                    .defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA))
+                            .position(route.endLocation)));
+                }
+            }
 
-            markers.add(mMap.addMarker(new MarkerOptions()
-                    .title(route.startAddress)
-                    .position(route.startLocation)));
-            markers.add(mMap.addMarker(new MarkerOptions()
-                    .title(route.endAddress)
-                    .position(route.endLocation)));
+            counterOfDirFindSucc++;
+            numOfPolyline++;
 
             int temp = Color.BLACK;
-            if(counter ==0){
-                temp = Color.BLUE;
+            if(numOfPolyline ==1){
+                temp = Color.parseColor("#007FFF");
             }
-            else if(counter==1){
-                temp = Color.RED;
+            else if(numOfPolyline==2){
+                temp = Color.parseColor("#228B22");
             }
-            else if(counter==2){
-                temp = Color.YELLOW;
+            else if(numOfPolyline==3){
+                temp = Color.parseColor("#FF8C00");
             }
-            else if(counter==3){
-                temp = Color.GREEN;
+            else if(numOfPolyline==4){
+                temp = Color.parseColor("#FFFF00");
             }
-            else if(counter ==4){
-                temp = Color.MAGENTA;
-            }
-            counter++;
+
 
             PolylineOptions polylineOptions = new PolylineOptions().
                     geodesic(true).
@@ -698,6 +748,13 @@ public class MenuActivity extends AppCompatActivity
                 polylineOptions.add(route.points.get(i));
 
             polylinePaths.add(mMap.addPolyline(polylineOptions));
+
+            //last call to this function, should zoom to fit all markers
+            if(numOfMarkers-1==numOfPolyline){
+                fixZoom();
+                minuteTemp = minuteTemp/60;
+                getEstTime();
+            }
         }
 
     }
@@ -711,7 +768,9 @@ public class MenuActivity extends AppCompatActivity
 
     @Override
     public void onDis_DurSuccess(List<Routes> routes) {
-        durationTemp = routes.get(0).distance.value;
+        distanceTemp = routes.get(0).distance.value;
+        minuteTemp += routes.get(0).duration.value;
+
     }
 
     private void fixZoom() {
@@ -721,10 +780,45 @@ public class MenuActivity extends AppCompatActivity
         }
         LatLngBounds bounds = builder.build();
 
-        int padding = 15; // offset from edges of the map in pixels
+        int padding = 300; // offset from edges of the map in pixels
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
 
         mMap.moveCamera(cu);
+
+    }
+
+    public void getEstTime(){
+
+        time1 = (EditText) findViewById(R.id.time1);
+        time2 = (EditText) findViewById(R.id.time2);
+        time3 = (EditText) findViewById(R.id.time3);
+        time4 = (EditText) findViewById(R.id.time4);
+        time5 = (EditText) findViewById(R.id.time5);
+
+        String t1 = time1.getText().toString();
+        String t2 = time2.getText().toString();
+        String t3 = time3.getText().toString();
+        String t4 = time4.getText().toString();
+        String t5 = time5.getText().toString();
+        Log.d(TAG,t1);
+        if(!(t1.matches(""))){
+            minuteTemp = minuteTemp+ Integer.parseInt(t1);
+        }
+        if(!(t2.matches(""))){
+            minuteTemp += Integer.parseInt(t2);
+        }
+        if(!(t3.matches(""))){
+            minuteTemp += Integer.parseInt(t3);
+        }
+        if(!(t4.matches(""))){
+            minuteTemp += Integer.parseInt(t4);
+        }
+        if(!(t5.matches(""))){
+            minuteTemp += Integer.parseInt(t5);
+        }
+        totalTime = (TextView) findViewById(R.id.totalTime);
+        totalTime.setText(Integer.toString(minuteTemp));
+
 
     }
 
