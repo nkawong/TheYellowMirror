@@ -50,15 +50,20 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context="com.theyellowmirror.sightseer.MenuActivity"
         android:gravity="center|top"
-        android:background="#B0E2FF"
+        android:background="@drawable/slideup_gradients"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="40dp"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/totalTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start planning!"/>
+            <TextView
+                android:id="@+id/totalDis"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Start planning!"/>
@@ -80,7 +85,6 @@
                 android:layout_width="350dp"
                 android:layout_height="90dp"
                 android:orientation="vertical"
-                android:background="#00BFFF"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
@@ -159,7 +163,6 @@
             <LinearLayout
                 android:layout_width="350dp"
                 android:layout_height="90dp"
-                android:background="#00BFFF"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
@@ -233,7 +236,6 @@
             <LinearLayout
                 android:layout_width="350dp"
                 android:layout_height="90dp"
-                android:background="#00BFFF"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
@@ -306,7 +308,6 @@
             <LinearLayout
                 android:layout_width="350dp"
                 android:layout_height="90dp"
-                android:background="#00BFFF"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
@@ -381,7 +382,6 @@
             <LinearLayout
                 android:layout_width="350dp"
                 android:layout_height="90dp"
-                android:background="#00BFFF"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
@@ -456,7 +456,7 @@
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/background_signup"
+                android:background="#C593F3"
                 android:clickable="true"
                 android:padding="16dp"
                 android:text="Start Route"

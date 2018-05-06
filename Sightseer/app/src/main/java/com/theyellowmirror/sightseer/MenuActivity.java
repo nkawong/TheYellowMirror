@@ -3,11 +3,13 @@ import Distance_DurationCheck.Dis_DurCheck;
 import Distance_DurationCheck.Routes;
 import Routing.*;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -121,12 +123,16 @@ public class MenuActivity extends AppCompatActivity
     private EditText time5;
     private TextView totalTime;
 
+    //est dis
+    private TextView totalDis;
+
     //routing
     private Button startRouteBT;
     private List<Polyline> polylinePaths = new ArrayList<>();
     private List<Marker> markers = new ArrayList<>();
     private int distanceTemp;
     private int minuteTemp;
+    private int totalDisTemp;
 
     //keep track of number of markers/ployline
     private int numOfMarkers =0;
@@ -267,19 +273,6 @@ public class MenuActivity extends AppCompatActivity
 
 
     public void initStartRouteButton(){
-        //clear previous data
-        if (markers != null) {
-            for (Marker marker : markers) {
-                marker.remove();
-            }
-        }
-
-
-        if (polylinePaths != null) {
-            for (Polyline polyline:polylinePaths ) {
-                polyline.remove();
-            }
-        }
         final SlidingUpPanelLayout mLayout= (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
 
         startRouteBT = (Button) findViewById(R.id.startRouteBT);
@@ -287,12 +280,29 @@ public class MenuActivity extends AppCompatActivity
 
             @Override
             public void onClick(View view) {
+
+                //clear previous data
+                if (markers != null) {
+                    for (Marker marker : markers) {
+                        marker.remove();
+                    }
+                }
+
+
+                if (polylinePaths != null) {
+                    for (Polyline polyline:polylinePaths ) {
+                        polyline.remove();
+                    }
+                }
+                totalDisTemp=0;
                 minuteTemp=0;
                 numOfPolyline=0;
                 numOfMarkers=0;
                 counterOfDirFindSucc=0;
+
                 startRout();
                 mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                Log.d(TAG,"SSSSSS");
 
             }
         });
@@ -749,11 +759,18 @@ public class MenuActivity extends AppCompatActivity
 
             polylinePaths.add(mMap.addPolyline(polylineOptions));
 
+            //update distance/time
+            totalDisTemp += (routes.get(0).distance.value/1690);
+            minuteTemp += routes.get(0).duration.value;
+
+
             //last call to this function, should zoom to fit all markers
             if(numOfMarkers-1==numOfPolyline){
                 fixZoom();
                 minuteTemp = minuteTemp/60;
                 getEstTime();
+                getEstDis();
+
             }
         }
 
@@ -763,13 +780,11 @@ public class MenuActivity extends AppCompatActivity
     @Override
     public void onDis_DurStart() {
 
-
     }
 
     @Override
     public void onDis_DurSuccess(List<Routes> routes) {
         distanceTemp = routes.get(0).distance.value;
-        minuteTemp += routes.get(0).duration.value;
 
     }
 
@@ -800,7 +815,6 @@ public class MenuActivity extends AppCompatActivity
         String t3 = time3.getText().toString();
         String t4 = time4.getText().toString();
         String t5 = time5.getText().toString();
-        Log.d(TAG,t1);
         if(!(t1.matches(""))){
             minuteTemp = minuteTemp+ Integer.parseInt(t1);
         }
@@ -820,6 +834,12 @@ public class MenuActivity extends AppCompatActivity
         totalTime.setText(Integer.toString(minuteTemp));
 
 
+    }
+
+    public void getEstDis(){
+        totalDis = (TextView) findViewById(R.id.totalDis);
+
+        totalDis.setText(Integer.toString(totalDisTemp));
     }
 
 
