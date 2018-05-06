@@ -44,8 +44,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center|top"
         android:orientation="vertical"
-        android:background="@drawable/new_login_gradients"
+        android:background="@drawable/slideup_gradients"
         >
 
         <LinearLayout
@@ -74,7 +75,7 @@
                     android:background="@android:color/transparent"
                     android:ems="10"
                     android:padding="5dp"
-                    android:text="1:12"
+                    android:text=""
                     android:textColor="#fff"
                     android:textSize="14dp" />
 
@@ -85,7 +86,7 @@
                     android:background="@android:color/transparent"
                     android:ems="10"
                     android:padding="5dp"
-                    android:text="30"
+                    android:text=""
                     android:textColor="#fff"
                     android:textSize="14dp" />
 
@@ -97,7 +98,7 @@
                     android:background="@android:color/transparent"
                     android:ems="10"
                     android:padding="5dp"
-                    android:text="2:30"
+                    android:text=""
                     android:textColor="#fff"
                     android:textSize="14dp" />
 
@@ -108,16 +109,15 @@
                     android:background="@android:color/transparent"
                     android:ems="10"
                     android:padding="5dp"
-                    android:text="120"
+                    android:text=""
                     android:textColor="#fff"
                     android:textSize="14dp" />
 
-                <Button
-                    android:layout_width="50dp"
-                    android:layout_height="30dp"
-                    android:text="End"
-                    android:textSize="8dp"
-                    android:background="@drawable/background_signup"/>
+                <!--<Button-->
+                    <!--android:layout_width="50dp"-->
+                    <!--android:layout_height="30dp"-->
+                    <!--android:text=""-->
+                    <!--android:textSize="8dp"/>-->
 
 
 
@@ -137,7 +137,7 @@
                     android:background="@android:color/transparent"
                     android:ems="10"
                     android:padding="5dp"
-                    android:text="Hour"
+                    android:text=""
                     android:textColor="#fff"
                     android:textSize="10dp" />
 
@@ -148,7 +148,7 @@
                     android:background="@android:color/transparent"
                     android:ems="10"
                     android:padding="5dp"
-                    android:text="Mile"
+                    android:text=""
                     android:textColor="#fff"
                     android:textSize="10dp" />
 
@@ -156,7 +156,7 @@
                     android:id="@+id/totalTimeLeftTV"
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
-                    android:text="Total Time"
+                    android:text=""
                     android:textColor="#fff"
                     android:textSize="10dp"
                     android:ems="10"
@@ -167,7 +167,7 @@
                     android:id="@+id/totalMileLeftTV"
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
-                    android:text="Total Mile"
+                    android:text=""
                     android:textColor="#fff"
                     android:textSize="10dp"
                     android:ems="10"
@@ -187,7 +187,7 @@
                     android:orientation="horizontal"
                     android:paddingTop="8dp">
 
-                    <EditText
+                    <TextView
                         android:id="@+id/order1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -213,7 +213,8 @@
                         android:drawablePadding="12dp"
                         android:drawableStart="@drawable/minutes"
                         android:ems="10"
-                        android:hint="minutes"
+                        android:imeOptions="actionDone"
+                        android:hint="Est Minutes"
                         android:inputType="number"
                         android:maxLines="1"
                         android:padding="8dp"
@@ -256,7 +257,7 @@
                     android:orientation="horizontal"
                     android:paddingTop="8dp">
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/order2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -282,7 +283,8 @@
                         android:drawablePadding="12dp"
                         android:drawableStart="@drawable/minutes"
                         android:ems="10"
-                        android:hint="minutes"
+                        android:imeOptions="actionDone"
+                        android:hint="Est Minutes"
                         android:inputType="number"
                         android:maxLines="1"
                         android:padding="8dp"
@@ -327,7 +329,7 @@
                 android:orientation="horizontal"
                 android:paddingTop="8dp">
 
-                <EditText
+                <Spinner
                     android:id="@+id/order3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -353,7 +355,8 @@
                     android:drawablePadding="12dp"
                     android:drawableStart="@drawable/minutes"
                     android:ems="10"
-                    android:hint="minutes"
+                    android:imeOptions="actionDone"
+                    android:hint="Est Minutes"
                     android:inputType="number"
                     android:maxLines="1"
                     android:padding="8dp"
@@ -397,7 +400,7 @@
                 android:orientation="horizontal"
                 android:paddingTop="8dp">
 
-                <EditText
+                <Spinner
                     android:id="@+id/order4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -423,7 +426,8 @@
                     android:drawablePadding="12dp"
                     android:drawableStart="@drawable/minutes"
                     android:ems="10"
-                    android:hint="minutes"
+                    android:imeOptions="actionDone"
+                    android:hint="Est Minutes"
                     android:inputType="number"
                     android:maxLines="1"
                     android:padding="8dp"
@@ -468,7 +472,7 @@
                 android:orientation="horizontal"
                 android:paddingTop="8dp">
 
-                <EditText
+                <Spinner
                     android:id="@+id/order5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -494,7 +498,8 @@
                     android:drawablePadding="12dp"
                     android:drawableStart="@drawable/minutes"
                     android:ems="10"
-                    android:hint="minutes"
+                    android:imeOptions="actionDone"
+                    android:hint="Est Minutes"
                     android:inputType="number"
                     android:maxLines="1"
                     android:padding="8dp"
@@ -545,15 +550,6 @@
                 android:textColor="#fff"
                 android:textSize="18sp"
                 android:textStyle="normal" />
-
-
-
-
-
-
-
-
-
 
 
         </LinearLayout>

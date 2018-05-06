@@ -1,35 +1,29 @@
 package com.theyellowmirror.sightseer;
-import Distance_DurationCheck.Durations;
+import Distance_DurationCheck.Dis_DurCheck;
 import Distance_DurationCheck.Routes;
 import Routing.*;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Path;
-import android.app.ProgressDialog;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.*;
-import android.view.KeyEvent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.location.Location;
+import android.support.v7.widget.Toolbar;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.PlaceDetectionClient;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -56,7 +50,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.content.pm.PackageManager;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,12 +57,10 @@ import java.util.List;
 import Routing.DirectionFinder;
 import Routing.DirectionFinderListener;
 
-import Distance_DurationCheck.Dis_DurCheck;
 import Distance_DurationCheck.Dis_DurCheckListener;
-import javax.net.ssl.HttpsURLConnection;
-import com.google.firebase.auth.AuthResult;
+
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback,GoogleApiClient.OnConnectionFailedListener,
@@ -83,9 +74,6 @@ public class MenuActivity extends AppCompatActivity
     private GoogleMap mMap;
     private CameraPosition mCameraPosition;
 
-    // The entry points to the Places API.
-    private GeoDataClient mGeoDataClient;
-    private PlaceDetectionClient mPlaceDetectionClient;
 
     // The entry point to the Fused Location Provider.
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -116,11 +104,16 @@ public class MenuActivity extends AppCompatActivity
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(-40, -168), new LatLng(71, 136));
 
+    //order drop down and edittext
+    private Spinner order2;
+    private Spinner order3;
+    private Spinner order4;
+    private Spinner order5;
+
     //routing
     private Button startRouteBT;
-    private List<Marker> originMarkers = new ArrayList<>();
-    private List<Marker> destinationMarkers = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
+    private List<Marker> markers = new ArrayList<>();
     private int durationTemp;
 
     @Override
@@ -128,22 +121,10 @@ public class MenuActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        //menu bar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        //init menu,action bar, navigation view
+        initMenu();
 
 
-
-        //autocomplete drop down search bar
-        initAutoComp();
 
         // Retrieve location and camera position from saved instance state.
         if (savedInstanceState != null) {
@@ -151,13 +132,40 @@ public class MenuActivity extends AppCompatActivity
             mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
         }
 
+        //init map and get current location
+        initMap();
+
+        //autocomplete drop down search bar
+        initAutoComp();
+
+        initOrderDropDown();
+
+
+
+        //init Start Route Button
+        initStartRouteButton();
 
         // Construct a GeoDataClient.
-        mGeoDataClient = Places.getGeoDataClient(this, null);
-
+//        mGeoDataClient = Places.getGeoDataClient(this, null);
         // Construct a PlaceDetectionClient.
-        mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
+//        mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
 
+
+    }
+
+    public void initMenu(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    public void initMap(){
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -165,41 +173,114 @@ public class MenuActivity extends AppCompatActivity
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
 
-        //initialize all 5 of the address area
+    public void initAutoComp(){
+        address1 = (AutoCompleteTextView) findViewById(R.id.address1);
+        address2 = (AutoCompleteTextView) findViewById(R.id.address2);
+        address3 = (AutoCompleteTextView) findViewById(R.id.address3);
+        address4 = (AutoCompleteTextView) findViewById(R.id.address4);
+        address5 = (AutoCompleteTextView) findViewById(R.id.address5);
+        mGoogleApiClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, this)
+                .build();
+        placeAutocompleteAdapter =  new PlaceAutocompleteAdapter(this,mGoogleApiClient,LAT_LNG_BOUNDS,null);
+        address1.setAdapter(placeAutocompleteAdapter);
+        address2.setAdapter(placeAutocompleteAdapter);
+        address3.setAdapter(placeAutocompleteAdapter);
+        address4.setAdapter(placeAutocompleteAdapter);
+        address5.setAdapter(placeAutocompleteAdapter);
+
+        //hide keyboard after choose an option from autocomplete
         init(address1);
         init(address2);
         init(address3);
         init(address4);
         init(address5);
+    }
 
-
-        address1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    //init address1-5 so that tapping an option from autocomplete will close the keyboard
+    private void init(final AutoCompleteTextView address){
+        address.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                in.hideSoftInputFromWindow(arg1.getWindowToken(), 0);
+                in.hideSoftInputFromWindow(arg1.getApplicationWindowToken(), 0);
 
             }
 
         });
+    }
 
+//    ArrayList<String> nums = new ArrayList<>();
+    String[] nums ={"-","2","3","4","5"};
+    ArrayAdapter<String> orderNumAdapter;
+    public void initOrderDropDown(){
+        order2 =  findViewById(R.id.order2);
+        order3 =  findViewById(R.id.order3);
+        order4 =  findViewById(R.id.order4);
+        order5 =  findViewById(R.id.order5);
+
+//        nums.add("-");
+//        nums.add("2");
+//        nums.add("3");
+//        nums.add("4");
+//        nums.add("5");
+
+        orderNumAdapter = new ArrayAdapter<String>(this,android.R.layout.select_dialog_singlechoice, nums);
+
+        order2.setAdapter(orderNumAdapter);
+        order3.setAdapter(orderNumAdapter);
+        order4.setAdapter(orderNumAdapter);
+        order5.setAdapter(orderNumAdapter);
+
+//        changeOrderDropDown(order2);
+//        changeOrderDropDown(order3);
+//        changeOrderDropDown(order4);
+//        changeOrderDropDown(order5);
+
+
+    }
+
+    //the dropdown bar from order changes when a item is selected
+//    private void changeOrderDropDown(final AutoCompleteTextView order){
+//        order.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//
+//            @Override
+//            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+//                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                in.hideSoftInputFromWindow(arg1.getApplicationWindowToken(), 0);
+//
+//                nums.remove(order.getText().toString());
+//                orderNumAdapter = new ArrayAdapter<String>(MenuActivity.this,android.R.layout.select_dialog_singlechoice, nums);
+//                order.setAdapter(orderNumAdapter);
+//
+//            }
+//
+//        });
+//    }
+
+    public void initStartRouteButton(){
+        final SlidingUpPanelLayout mLayout= (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         //testing
         startRouteBT = (Button) findViewById(R.id.startRouteBT);
         startRouteBT.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
+                counter=0;
                 startRout();
+                mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
 
             }
         });
-
-
     }
 
-    //menu
+    //Menu settings
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -217,7 +298,6 @@ public class MenuActivity extends AppCompatActivity
         return true;
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -254,7 +334,7 @@ public class MenuActivity extends AppCompatActivity
     }
 
 
-    /**
+    /*
      * Saves the state of the map when the activity is paused.
      */
     @Override
@@ -267,23 +347,21 @@ public class MenuActivity extends AppCompatActivity
     }
 
 
-    /**
-     * Handles a click on the menu option to get a place.
-     * @param item The menu item to handle.
-     * @return Boolean.
+    /*
+     * get current place
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.option_get_place) {
-            moveCamera(new LatLng(mLastKnownLocation.getLatitude(),
-                    mLastKnownLocation.getLongitude()), DEFAULT_ZOOM, "My Location");
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(),
+                    mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
         }
         return true;
     }
 
-    /**
-     * Manipulates the map when it's available.
-     * This callback is triggered when the map is ready to be used.
+    /*
+     *Manipulates the map when it's available.
+     *This callback is triggered when the map is ready to be used.
      */
     @Override
     public void onMapReady(GoogleMap map) {
@@ -299,9 +377,7 @@ public class MenuActivity extends AppCompatActivity
         getDeviceLocation();
     }
 
-    /**
-     * Gets the current location of the device, and positions the map's camera.
-     */
+    //Gets the current location of the device, and positions the map's camera.
     private void getDeviceLocation() {
         /*
          * Get the best and most recent location of the device, which may be null in rare
@@ -316,8 +392,8 @@ public class MenuActivity extends AppCompatActivity
                         if (task.isSuccessful()) {
                             // Set the map's camera position to the current location of the device.
                             mLastKnownLocation = task.getResult();
-                            moveCamera(new LatLng(mLastKnownLocation.getLatitude(),
-                                            mLastKnownLocation.getLongitude()), DEFAULT_ZOOM, "My Location");
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(),
+                                    mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
@@ -334,7 +410,7 @@ public class MenuActivity extends AppCompatActivity
     }
 
 
-    /**
+    /*
      * Prompts the user for permission to use the device location.
      */
     private void getLocationPermission() {
@@ -354,7 +430,7 @@ public class MenuActivity extends AppCompatActivity
         }
     }
 
-    /**
+    /*
      * Handles the result of the request for location permissions.
      */
     @Override
@@ -375,7 +451,7 @@ public class MenuActivity extends AppCompatActivity
     }
 
 
-    /**
+    /*
      * Updates the map's UI settings based on whether the user has granted location permission.
      */
     private void updateLocationUI() {
@@ -397,60 +473,7 @@ public class MenuActivity extends AppCompatActivity
         }
     }
 
-    //init address1-5 so that enter search for the address input
-    private void init(final AutoCompleteTextView address){
-        address.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                in.hideSoftInputFromWindow(arg1.getWindowToken(), 0);
-
-            }
-
-        });
-        address.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if(actionId == EditorInfo.IME_ACTION_SEARCH
-                        || actionId == EditorInfo.IME_ACTION_DONE
-                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
-                        || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER){
-
-                    //execute our method for searching
-                    geoLocate(address);
-                }
-
-                return false;
-            }
-        });
-    }
-
-    private void geoLocate(AutoCompleteTextView address){
-        Log.d(TAG, "geoLocate: geolocating");
-
-
-        String search = address.getText().toString();
-        Geocoder geo = new Geocoder(MenuActivity.this);
-        if(geo.isPresent()){
-            try {
-                List<Address> addresses = geo.getFromLocationName(search,1);
-                if (addresses.size()==0){
-                    Toast.makeText(MenuActivity.this,"Address locating failed, please enter the full address",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Address temp = addresses.get(0);
-                LatLng location = new LatLng(temp.getLatitude(),temp.getLongitude());
-                moveCamera(location,DEFAULT_ZOOM,"worked!");
-            } catch (IOException e) {
-                Toast.makeText(MenuActivity.this,"Network connection to geocoder not working",Toast.LENGTH_SHORT).show();
-
-            }
-
-        }
-
-
-    }
 
 
     private void moveCamera(LatLng latLng, float zoom, String title){
@@ -470,25 +493,7 @@ public class MenuActivity extends AppCompatActivity
 
     }
 
-    public void initAutoComp(){
-        address1 = (AutoCompleteTextView) findViewById(R.id.address1);
-        address2 = (AutoCompleteTextView) findViewById(R.id.address2);
-        address3 = (AutoCompleteTextView) findViewById(R.id.address3);
-        address4 = (AutoCompleteTextView) findViewById(R.id.address4);
-        address5 = (AutoCompleteTextView) findViewById(R.id.address5);
-        mGoogleApiClient = new GoogleApiClient
-                .Builder(this)
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .enableAutoManage(this, this)
-                .build();
-        placeAutocompleteAdapter =  new PlaceAutocompleteAdapter(this,mGoogleApiClient,LAT_LNG_BOUNDS,null);
-        address1.setAdapter(placeAutocompleteAdapter);
-        address2.setAdapter(placeAutocompleteAdapter);
-        address3.setAdapter(placeAutocompleteAdapter);
-        address4.setAdapter(placeAutocompleteAdapter);
-        address5.setAdapter(placeAutocompleteAdapter);
-    }
+
     private String[] addressOrderArray = new String[5];
     private ArrayList<String> notOrdered;
 
@@ -512,6 +517,7 @@ public class MenuActivity extends AppCompatActivity
         String a3 = address3.getText().toString();
         String a4 = address4.getText().toString();
         String a5 = address5.getText().toString();
+
         //starting address
         addressOrderArray[0]=a1;
 
@@ -523,7 +529,8 @@ public class MenuActivity extends AppCompatActivity
             else if(io2==4) addressOrderArray[3]=a2;
             else if(io2==5) addressOrderArray[4]=a2;
         }
-        else notOrdered.add(a2);
+        else if(!a2.matches(""))notOrdered.add(a2);
+
         if(o3.matches("1|2|3|4|5")){
             io3 =Integer.parseInt(o3);
             if(io3==1) addressOrderArray[0]=a3;
@@ -532,7 +539,8 @@ public class MenuActivity extends AppCompatActivity
             else if(io3==4) addressOrderArray[3]=a3;
             else if(io3==5) addressOrderArray[4]=a3;
         }
-        else notOrdered.add(a3);
+        else if(!a3.matches(""))notOrdered.add(a3);
+
         if(o4.matches("1|2|3|4|5")){
             io4 =Integer.parseInt(o4);
             if(io4==1) addressOrderArray[0]=a4;
@@ -541,7 +549,8 @@ public class MenuActivity extends AppCompatActivity
             else if(io4==4) addressOrderArray[3]=a4;
             else if(io4==5) addressOrderArray[4]=a4;
         }
-        else notOrdered.add(a4);
+        else if(!a4.matches(""))notOrdered.add(a4);
+
         if(o5.matches("1|2|3|4|5")){
             io5 =Integer.parseInt(o5);
             if(io5==1) addressOrderArray[0]=a5;
@@ -550,7 +559,7 @@ public class MenuActivity extends AppCompatActivity
             else if(io5==4) addressOrderArray[3]=a5;
             else if(io5==5) addressOrderArray[4]=a5;
         }
-        else notOrdered.add(a5);
+        else if(!a5.matches(""))notOrdered.add(a5);
 
         for(int i =1;i<5;i++){
             if(addressOrderArray[i]==null){
@@ -559,19 +568,21 @@ public class MenuActivity extends AppCompatActivity
                 String endMin =null;
                 for(String temp: notOrdered){
                     try {
-                        Log.d(TAG,"now"+addressOrderArray[i-1]);
-                        Log.d(TAG,"temp"+temp);
                         new Dis_DurCheck(this,addressOrderArray[i-1],temp).execute();
-                        if(min==0) {
-                            min=durationTemp;
-                            endMin = temp;
-                        }
-                        if(durationTemp<min) {
-                            min=durationTemp;
-                            endMin = temp;
-                        }
+
+
+
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
+                    }
+                    Log.d(TAG,temp+durationTemp);
+                    if(min==0) {
+                        min=durationTemp;
+                        endMin = temp;
+                    }
+                    else if(durationTemp<min) {
+                        min=durationTemp;
+                        endMin = temp;
                     }
                 }
                 addressOrderArray[i] = endMin;
@@ -582,9 +593,13 @@ public class MenuActivity extends AppCompatActivity
 
 
     }
+
+    private int counter =0;
     public void startRout(){
 
         ordering();
+        Log.d(TAG,"0: "+addressOrderArray[0]);
+        Log.d(TAG,"1: "+addressOrderArray[1]);
         try{
             new DirectionFinder(this,addressOrderArray[0],addressOrderArray[1]).execute();
         }
@@ -592,26 +607,34 @@ public class MenuActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        try{
-            new DirectionFinder(this,addressOrderArray[1],addressOrderArray[2]).execute();
-        }
-        catch (UnsupportedEncodingException e){
-            e.printStackTrace();
-        }
-
-        try{
-            new DirectionFinder(this,addressOrderArray[2],addressOrderArray[3]).execute();
-        }
-        catch (UnsupportedEncodingException e){
-            e.printStackTrace();
+        if(addressOrderArray[2]!=null){
+            Log.d(TAG,"2: "+addressOrderArray[2]);
+            try{
+                new DirectionFinder(this,addressOrderArray[1],addressOrderArray[2]).execute();
+            }
+            catch (UnsupportedEncodingException e){
+                e.printStackTrace();
+            }
         }
 
-        try{
-            new DirectionFinder(this,addressOrderArray[3],addressOrderArray[4]).execute();
+        if(addressOrderArray[3]!=null) {
+            Log.d(TAG,"3: "+addressOrderArray[3]);
+            try {
+                new DirectionFinder(this, addressOrderArray[2], addressOrderArray[3]).execute();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
-        catch (UnsupportedEncodingException e){
-            e.printStackTrace();
+
+        if(addressOrderArray[4]!=null) {
+            Log.d(TAG,"4: "+addressOrderArray[4]);
+            try {
+                new DirectionFinder(this, addressOrderArray[3], addressOrderArray[4]).execute();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
+
 
 
 
@@ -620,17 +643,12 @@ public class MenuActivity extends AppCompatActivity
     @Override
     public void onDirectionFinderStart() {
 
-        if (originMarkers != null) {
-            for (Marker marker : originMarkers) {
+        if (markers != null) {
+            for (Marker marker : markers) {
                 marker.remove();
             }
         }
 
-        if (destinationMarkers != null) {
-            for (Marker marker : destinationMarkers) {
-                marker.remove();
-            }
-        }
 
         if (polylinePaths != null) {
             for (Polyline polyline:polylinePaths ) {
@@ -641,25 +659,39 @@ public class MenuActivity extends AppCompatActivity
 
     @Override
     public void onDirectionFinderSuccess(List<Route> routes) {
-        polylinePaths = new ArrayList<>();
-        originMarkers = new ArrayList<>();
-        destinationMarkers = new ArrayList<>();
 
         for (Route route : routes) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
-            ((TextView) findViewById(R.id.timeLeftTV)).setText(route.duration.text);
-            ((TextView) findViewById(R.id.mileLeftTV)).setText(route.distance.text);
 
-            originMarkers.add(mMap.addMarker(new MarkerOptions()
+
+            markers.add(mMap.addMarker(new MarkerOptions()
                     .title(route.startAddress)
                     .position(route.startLocation)));
-            destinationMarkers.add(mMap.addMarker(new MarkerOptions()
+            markers.add(mMap.addMarker(new MarkerOptions()
                     .title(route.endAddress)
                     .position(route.endLocation)));
 
+            int temp = Color.BLACK;
+            if(counter ==0){
+                temp = Color.BLUE;
+            }
+            else if(counter==1){
+                temp = Color.RED;
+            }
+            else if(counter==2){
+                temp = Color.YELLOW;
+            }
+            else if(counter==3){
+                temp = Color.GREEN;
+            }
+            else if(counter ==4){
+                temp = Color.MAGENTA;
+            }
+            counter++;
+
             PolylineOptions polylineOptions = new PolylineOptions().
                     geodesic(true).
-                    color(Color.BLUE).
+                    color(temp).
                     width(10);
 
             for (int i = 0; i < route.points.size(); i++)
@@ -679,21 +711,22 @@ public class MenuActivity extends AppCompatActivity
 
     @Override
     public void onDis_DurSuccess(List<Routes> routes) {
-
-        durationTemp = routes.get(0).duration.value;
+        durationTemp = routes.get(0).distance.value;
     }
-//
-//    private void fixZoom() {
-//        List<LatLng> points = route.getPoints(); // route is instance of PolylineOptions
-//
-//        LatLngBounds.Builder bc = new LatLngBounds.Builder();
-//
-//        for (LatLng item : points) {
-//            bc.include(item);
-//        }
-//
-//        map.moveCamera(CameraUpdateFactory.newLatLngBounds(bc.build(), 50));
-//    }
+
+    private void fixZoom() {
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (Marker marker : markers) {
+            builder.include(marker.getPosition());
+        }
+        LatLngBounds bounds = builder.build();
+
+        int padding = 15; // offset from edges of the map in pixels
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+
+        mMap.moveCamera(cu);
+
+    }
 
 
 

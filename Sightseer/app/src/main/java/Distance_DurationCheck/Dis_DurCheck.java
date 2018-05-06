@@ -1,6 +1,10 @@
 package Distance_DurationCheck;
 
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -17,6 +21,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 public class Dis_DurCheck {
@@ -27,6 +32,8 @@ public class Dis_DurCheck {
     private String destination;
     List<Routes> routes;
 
+    private String TAG = "check";
+
     public Dis_DurCheck(Dis_DurCheckListener listener, String origin, String destination) {
         this.listener = listener;
         this.origin = origin;
@@ -35,7 +42,16 @@ public class Dis_DurCheck {
 
     public void execute() throws UnsupportedEncodingException {
         listener.onDis_DurStart();
-        new Distance_DurationCheck.Dis_DurCheck.DownloadRawData().execute(createUrl());
+        DownloadRawData temp = new Distance_DurationCheck.Dis_DurCheck.DownloadRawData();
+        temp.execute(createUrl());
+        try {
+            temp.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private String createUrl() throws UnsupportedEncodingException {
@@ -61,6 +77,12 @@ public class Dis_DurCheck {
                     buffer.append(line + "\n");
                 }
 
+                try {
+                    parseJSon(buffer.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
                 return buffer.toString();
 
             } catch (MalformedURLException e) {
@@ -73,11 +95,8 @@ public class Dis_DurCheck {
 
         @Override
         protected void onPostExecute(String res) {
-            try {
-                parseJSon(res);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+
+
         }
     }
 
@@ -101,10 +120,10 @@ public class Dis_DurCheck {
             route.duration = new Durations(jsonDuration.getString("text"), jsonDuration.getInt("value"));
 
             routes.add(route);
+            listener.onDis_DurSuccess(routes);
         }
-
-        listener.onDis_DurSuccess(routes);
     }
+
 
 
 }
