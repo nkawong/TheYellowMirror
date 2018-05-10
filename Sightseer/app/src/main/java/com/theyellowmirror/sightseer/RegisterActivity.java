@@ -34,11 +34,13 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_register);
+
         //Get account details from user
         register = findViewById(R.id.registerBT);
         email = findViewById(R.id.emailET);
         password = findViewById(R.id.passET);
 
+        //register when click on register button
         register.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 createAccount();
@@ -68,8 +70,10 @@ public class RegisterActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("CreateAccount", "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-//                            Intent mapScreen = new Intent(RegisterActivity.this, MenuActivity.class);
-//                            RegisterActivity.this.startActivity(mapScreen);
+                            Toast.makeText(RegisterActivity.this,
+                                    "Account created sucessfully!", Toast.LENGTH_LONG).show();
+                            Intent mapScreen = new Intent(RegisterActivity.this, MenuActivity.class);
+                            RegisterActivity.this.startActivity(mapScreen);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("CreateAccount", "createUserWithEmail:failure", task.getException());
