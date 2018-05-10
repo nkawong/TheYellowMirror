@@ -67,6 +67,8 @@ import Distance_DurationCheck.Dis_DurCheckListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import org.w3c.dom.Text;
+
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback,GoogleApiClient.OnConnectionFailedListener,
         DirectionFinderListener,Dis_DurCheckListener{
@@ -122,9 +124,14 @@ public class MenuActivity extends AppCompatActivity
     private EditText time4;
     private EditText time5;
     private TextView totalTime;
+    private TextView tTime;
+
+    //display message
+    private TextView swipeUp;
 
     //est dis
     private TextView totalDis;
+    private TextView tMile;
 
     //routing
     private Button startRouteBT;
@@ -770,6 +777,8 @@ public class MenuActivity extends AppCompatActivity
                 minuteTemp = minuteTemp/60;
                 getEstTime();
                 getEstDis();
+                swipeUp = (TextView) findViewById(R.id.swipeUp);
+                swipeUp.setText("");
 
             }
         }
@@ -831,15 +840,19 @@ public class MenuActivity extends AppCompatActivity
             minuteTemp += Integer.parseInt(t5);
         }
         totalTime = (TextView) findViewById(R.id.totalTime);
-        totalTime.setText(Integer.toString(minuteTemp));
+        totalTime.setText("Total Minutes: ");
+        tTime = (TextView) findViewById(R.id.tTime);
+        tTime.setText(Integer.toString(minuteTemp));
+
 
 
     }
 
     public void getEstDis(){
         totalDis = (TextView) findViewById(R.id.totalDis);
-
-        totalDis.setText(Integer.toString(totalDisTemp));
+        totalDis.setText("Total Miles: ");
+        tMile = (TextView) findViewById(R.id.tMile);
+        tMile.setText(Integer.toString(totalDisTemp));
     }
 
 

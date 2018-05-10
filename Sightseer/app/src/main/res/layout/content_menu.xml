@@ -53,23 +53,55 @@
         android:background="@drawable/slideup_gradients"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="vertical">
+            android:layout_height="40dp">
+
             <TextView
                 android:id="@+id/totalTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Start planning!"/>
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="88dp"
+                android:textColor="#fff" />
+
             <TextView
                 android:id="@+id/totalDis"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Start planning!"/>
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/totalTime"
+                android:textColor="#fff" />
+
+            <TextView
+                android:id="@+id/tTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/totalDis"
+                android:layout_marginStart="20dp"
+                android:layout_toEndOf="@+id/totalTime"
+                android:textColor="#fff" />
+
+            <TextView
+                android:id="@+id/tMile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/tTime"
+                android:layout_below="@+id/totalTime"
+                android:textColor="#fff" />
+
+            <TextView
+                android:id="@+id/swipeUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:textColor="#fff"
+                android:text="Swipe up to begin planning your route!" />
 
 
-        </LinearLayout>
+        </RelativeLayout>
 
 
 
@@ -104,7 +136,7 @@
                     android:inputType="text"
                     android:singleLine="true"
                     android:textColor="#fff"
-                    android:textCursorDrawable="@null"
+                    android:textCursorDrawable="@drawable/cursor"
                     android:maxLines="1"
                     android:padding="5dp"
                     android:textColorHint="#ffffff"/>
@@ -182,7 +214,7 @@
                     android:inputType="text"
                     android:singleLine="true"
                     android:textColor="#fff"
-                    android:textCursorDrawable="@null"
+                    android:textCursorDrawable="@drawable/cursor"
                     android:maxLines="1"
                     android:padding="8dp"
                     android:textColorHint="#ffffff"/>
@@ -255,7 +287,7 @@
                     android:inputType="text"
                     android:singleLine="true"
                     android:textColor="#fff"
-                    android:textCursorDrawable="@null"
+                    android:textCursorDrawable="@drawable/cursor"
                     android:maxLines="1"
                     android:padding="8dp"
                     android:textColorHint="#ffffff"/>
@@ -327,7 +359,7 @@
                     android:inputType="text"
                     android:singleLine="true"
                     android:textColor="#fff"
-                    android:textCursorDrawable="@null"
+                    android:textCursorDrawable="@drawable/cursor"
                     android:maxLines="1"
                     android:padding="8dp"
                     android:textColorHint="#ffffff"/>
@@ -401,7 +433,7 @@
                     android:inputType="text"
                     android:singleLine="true"
                     android:textColor="#fff"
-                    android:textCursorDrawable="@null"
+                    android:textCursorDrawable="@drawable/cursor"
                     android:maxLines="1"
                     android:padding="8dp"
                     android:textColorHint="#ffffff"/>
