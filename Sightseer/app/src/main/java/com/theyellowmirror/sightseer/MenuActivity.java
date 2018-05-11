@@ -41,8 +41,12 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -58,6 +62,7 @@ import android.content.pm.PackageManager;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import Routing.DirectionFinder;
@@ -168,7 +173,7 @@ public class MenuActivity extends AppCompatActivity
 
         //init map and get current location
         initMap();
-        
+
 
         //initialize order spinner drop down bar
         initOrderDropDown();
@@ -651,7 +656,7 @@ public class MenuActivity extends AppCompatActivity
 
         ordering();
         Log.d(TAG,"0: "+addressOrderArray[0]);
-        Log.d(TAG,"1: "+addressOrderArray[1]);
+        Log.d(TAG,"1: "+addressOrderArray[3]);
         try{
             new DirectionFinder(this,addressOrderArray[0],addressOrderArray[1]).execute();
         }
@@ -686,9 +691,7 @@ public class MenuActivity extends AppCompatActivity
                 e.printStackTrace();
             }
         }
-
-
-
+        saveLocations();
 
     }
 
@@ -697,6 +700,33 @@ public class MenuActivity extends AppCompatActivity
 
 
     }
+
+    public void saveLocations(){
+        for(final String address: addressOrderArray) {
+            if(address != null) {
+                HashMap<String, Object> addressMap = new HashMap<>();
+                addressMap.put("address", address);
+                fStore.collection("Locations")
+                        .document(String.valueOf(address.hashCode()))
+                        .set(addressMap);
+//                setVisitedLocation(addressMap, address);
+            }
+        }
+    }
+
+//    public void setVisitedLocation(HashMap<String, Object> addressMap, String address){
+//        FirebaseUser user = FirebaseAuth.getInstance().
+//        fStore.collection("VisitedLocation")
+//                .document(String.valueOf(address.hashCode()))
+//                .set(addressMap);
+//        setLocationVisisted(addressMap, address);
+//    }
+
+//    public void setLocationVisisted(HashMap<String, Object> addressMap, String address){
+//        fStore.collection("LocationVisited")
+//                .document(String.valueOf(.hashCode()))
+//                .set(addressMap);
+//    }
 
     private int counterOfDirFindSucc;
     @Override

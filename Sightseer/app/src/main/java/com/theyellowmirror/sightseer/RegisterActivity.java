@@ -21,6 +21,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.AuthResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
 
 public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -70,6 +73,7 @@ public class RegisterActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("CreateAccount", "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            createUserEntry(user);
                             Toast.makeText(RegisterActivity.this,
                                     "Account created sucessfully!", Toast.LENGTH_LONG).show();
                             Intent mapScreen = new Intent(RegisterActivity.this, MenuActivity.class);
@@ -83,6 +87,14 @@ public class RegisterActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    private void createUserEntry(FirebaseUser user){
+        FirebaseFirestore fstore = FirebaseFirestore.getInstance();
+        HashMap<String, Object> userMap = new HashMap<>();
+        userMap.put("username", user.getEmail());
+        fstore.collection("Users").document(user.getUid()).set(userMap);
+
     }
     private boolean validateForm() {
         boolean valid = true;
