@@ -168,9 +168,7 @@ public class MenuActivity extends AppCompatActivity
 
         //init map and get current location
         initMap();
-
-        //autocomplete drop down search bar
-        initAutoComp();
+        
 
         //initialize order spinner drop down bar
         initOrderDropDown();
