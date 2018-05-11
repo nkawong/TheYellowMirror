@@ -42,7 +42,6 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.passField);
 
         //checks if the user has the right google service
-        //Links homeActivity with textView "Skip"- skips to main/home page
         if(isServiceOK()){
             init();
         }
@@ -67,6 +66,8 @@ public class LoginActivity extends AppCompatActivity {
                 LoginActivity.this.startActivity(skipIntent);
             }
         });
+
+        //sign in when click on signin
         login.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 signIn();
@@ -114,6 +115,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+    //checks if the service version is good
     public boolean isServiceOK(){
         Log.d(TAG,"isServiceOK: checking google service");
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(LoginActivity.this);
