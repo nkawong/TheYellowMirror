@@ -309,7 +309,6 @@ public class MenuActivity extends AppCompatActivity
 
                 startRout();
                 mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-                Log.d(TAG,"SSSSSS");
 
             }
         });

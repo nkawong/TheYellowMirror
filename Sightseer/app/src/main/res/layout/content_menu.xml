@@ -159,7 +159,9 @@
                         android:editable="false"
                         android:inputType="none"
                         android:maxLines="1"
-                        android:padding="8dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="8dp"
                         android:singleLine="true"
                         android:textColor="#fff"
                         android:textCursorDrawable="@null"
@@ -174,6 +176,7 @@
                         android:drawableStart="@drawable/minutes"
                         android:ems="10"
                         android:hint="Minutes"
+                        android:imeOptions="actionDone"
                         android:inputType="number"
                         android:maxLines="1"
                         android:padding="8dp"
@@ -188,6 +191,10 @@
 
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#fff"/>
 
 
             <!--address 2-->
@@ -252,6 +259,7 @@
                         android:ems="10"
                         android:hint="Minutes"
                         android:inputType="number"
+                        android:imeOptions="actionDone"
                         android:maxLines="1"
                         android:padding="8dp"
                         android:singleLine="true"
@@ -262,6 +270,10 @@
 
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#fff"/>
 
             <!--address 3-->
 
@@ -321,6 +333,7 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:drawablePadding="12dp"
+                        android:imeOptions="actionDone"
                         android:drawableStart="@drawable/minutes"
                         android:ems="10"
                         android:hint="Minutes"
@@ -334,6 +347,11 @@
                 </LinearLayout>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#fff"/>
 
 
             <!--address 4-->
@@ -397,6 +415,7 @@
                         android:ems="10"
                         android:hint="Minutes"
                         android:inputType="number"
+                        android:imeOptions="actionDone"
                         android:maxLines="1"
                         android:padding="8dp"
                         android:singleLine="true"
@@ -407,6 +426,10 @@
 
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#fff"/>
 
 
             <!--address 5-->
@@ -469,6 +492,7 @@
                         android:drawablePadding="12dp"
                         android:drawableStart="@drawable/minutes"
                         android:ems="10"
+                        android:imeOptions="actionDone"
                         android:hint="Minutes"
                         android:inputType="number"
                         android:maxLines="1"
@@ -480,6 +504,11 @@
                 </LinearLayout>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#fff"/>
 
 
             <Button
